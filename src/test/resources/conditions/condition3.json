@@ -1,0 +1,13 @@
+{
+  "op": "&&",
+  "lhs": {
+    "op": "=",
+    "lhs": "press",
+    "rhs": "Collins Crime Club"
+  },
+  "rhs": {
+    "op": ">=",
+    "lhs": "noPages",
+    "rhs": 300
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "op": "&&",
+  "lhs": {
+    "op": "between",
+    "lhs": "id",
+    "range1": 3,
+    "range2": 5
+  },
+  "rhs": {
+    "op": "=",
+    "lhs": "isDeleted",
+    "rhs": false
+  }
+}

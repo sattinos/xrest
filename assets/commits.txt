@@ -1,0 +1,6 @@
+1.0.1
+=====
+    [add] Implementation of CRUD Controller for the following endpoints:
+            GET_ONE, GET_MANY, COUNT, CREATE_ONE, CREATE_MANY, UPDATE_ONE, UPDATE_MANY, DELETE_ONE, DELETE_MANY
+    [add] Webapp test project (Spring Boot Based)
+    [add] All the above endpoints integration tests

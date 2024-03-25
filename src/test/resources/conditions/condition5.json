@@ -1,0 +1,15 @@
+{
+  "op": "&&",
+  "lhs": {
+    "op": ">",
+    "lhs": "birthDateGregorian",
+    "rhs": "2009-01-01",
+    "type": "Date"
+  },
+  "rhs": {
+    "op": "<",
+    "lhs": "birthDateGregorian",
+    "rhs": "2015-01-01",
+    "type": "Date"
+  }
+}

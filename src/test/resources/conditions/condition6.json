@@ -1,0 +1,15 @@
+{
+  "op": "&&",
+  "lhs": {
+    "op": "between",
+    "lhs": "publishDate",
+    "range1": "1999-06-01",
+    "range2": "2003-12-01",
+    "type": "Date"
+  },
+  "rhs": {
+    "op": "like",
+    "lhs": "title",
+    "rhs": "%Harry Potter%"
+  }
+}
