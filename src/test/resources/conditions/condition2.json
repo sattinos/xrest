@@ -1,0 +1,13 @@
+{
+  "op": "&&",
+  "lhs": {
+    "op": "like",
+    "lhs": "name",
+    "rhs": "%ROLE%"
+  },
+  "rhs": {
+    "op": "=",
+    "lhs": "isDeleted",
+    "rhs": false
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "op": "&&",
+  "lhs": {
+    "op": "=",
+    "lhs": "id",
+    "rhs": 2
+  },
+  "rhs": {
+    "op": "=",
+    "lhs": "isDeleted",
+    "rhs": false
+  }
+}
