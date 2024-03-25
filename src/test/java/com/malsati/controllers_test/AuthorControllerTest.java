@@ -67,7 +67,6 @@ public class AuthorControllerTest {
         this.jsonRestHitter = new JsonRestHitter(restHitter, objectMapper);
     }
 
-    // CreateOne
     @Test
     @Sql(scripts = "/sql/seed.sql")
     @Order(1)

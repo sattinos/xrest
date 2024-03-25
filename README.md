@@ -20,10 +20,21 @@ But, as the first release, I have included a test project (Web App) in H2 only.
 Providing tests for all type of databases is coming soon.
 
 # How to build
+```bash
 mvn clean package
+```
+
 
 # How to test 
+```bash
 mvn test
+```
+
+
+while testing the project, I recommend you test using the test runner of IntelliJ Idea Community Edition.
+Each test case will output explanatory messages. 
+
+
 
 # Expressing Where Condition
 The Where condition is in JSON notation. It allows you to express a business filter in JSON format.
@@ -172,7 +183,7 @@ public class Author extends BaseEntity<Long> {
 
 ## 2) Design CRUD endpoints DTOs
 
-### CreateOne Endpoint (CreateOneInputDto, CreateOneOutputDto)
+#### CreateOne Endpoint (CreateOneInputDto, CreateOneOutputDto)
 
 ```java
 @Data
@@ -198,26 +209,27 @@ public class CreateOneAuthorOutputDto extends CreateOneAuthorInputDto {
 }
 ```
 
-### UpdateOne Endpoint (UpdateOneInputDto)
+#### UpdateOne Endpoint (UpdateOneInputDto)
 ```java
 
 public class UpdateOneAuthorInputDto extends CreateOneAuthorOutputDto {  
 }
 ```
 
-### GetOne Endpoint (GetOneInputDto)
+#### GetOne Endpoint (GetOneInputDto)
 ```java
 public class GetOneAuthorOutputDto extends CreateOneAuthorOutputDto {
 }
 ```
 
-### DeleteOne Endpoint (DeleteOneOutputDto)
+#### DeleteOne Endpoint (DeleteOneOutputDto)
 ```java
 public class DeleteOneAuthorOutputDto extends UpdateOneAuthorInputDto {
 }
 ```
 
-## 3) Write down your entity mapper interface that inherits from IMapper
+## 3) Write down your entity mapper interface:
+It should inherit from IMapper
 
 ```java
 @Mapper(componentModel = "spring")
@@ -279,7 +291,8 @@ public interface AuthorMapper extends IMapper<Author,
 ```
 
 
-## 4) Design your repository: Make sure you inherit from JpaRepository as well as JpaSpecificationExecutor : 
+## 4) Design your repository
+Make sure you inherit from `JpaRepository` as well as `JpaSpecificationExecutor` : 
 ```java
 public interface AuthorRepository extends JpaRepository<Author, Long>, JpaSpecificationExecutor<Author> {
     boolean existsByFullName(String name);
@@ -287,13 +300,13 @@ public interface AuthorRepository extends JpaRepository<Author, Long>, JpaSpecif
 ```
 
 ## 5) Write down your service class:
-1. It shoud extend CrudServiceORM
+1. It should extend CrudServiceORM
 2. In its constructor, it should inject the entity 
    repository and the mapper you've created in previous steps.
-3. Implement validateCreateOneInput if needed
-4. Implement onPreCreateOne if needed
-5. Implement validateUpdateOneInput if needed
-6. Implement onPreUpdateOne if needed
+3. Implement `validateCreateOneInput` if needed
+4. Implement `onPreCreateOne` if needed
+5. Implement `validateUpdateOneInput` if needed
+6. Implement `onPreUpdateOne` if needed
 
 ```java
 @Service
@@ -331,14 +344,14 @@ public class AuthorsService extends CrudServiceORM<
     }
 
     @Override
-    protected void onPreUpdateOne(UpdateOneAuthorInputDto updateOneAuthorInputDto, Author author) {
+    protected void onPrUpdateOne(UpdateOneAuthorInputDto updateOneAuthorInputDto, Author author) {
         // Write down any Business Specific Logic Here before the entity is saved to DB
     }
 }
 ```
 
 ## 6) Write your CRUD Controller:
-1. It should inherit from CRUDController
+1. It should inherit from CRUDController<br/>
 2. It should pass the service class you've created in previous step
 
 ```java
@@ -358,9 +371,10 @@ public class AuthorsController extends CrudController<Author,
 ```
 
 Before start using the library, I recommend you check the test project inside the test folder.
-You will find:
-    1. simple_web_app folder : This is a sample web application it contains a practical example of how to use the library.
+You will find: <br/>
+    1. simple_web_app folder : This is a sample web application it contains a practical example of how to use the library.<br/>
     2. AuthorControllerTest: All Endpoint test cases. It also has cases of when you can pass JSON condition.
+<br/>
+<br/>
 
 ![Class Diagram](assets/classDiagram.png)
-
