@@ -4,3 +4,7 @@
             GET_ONE, GET_MANY, COUNT, CREATE_ONE, CREATE_MANY, UPDATE_ONE, UPDATE_MANY, DELETE_ONE, DELETE_MANY
     [add] Webapp test project (Spring Boot Based)
     [add] All the above endpoints integration tests
+
+1.0.2
+=====
+    [update] readme file
