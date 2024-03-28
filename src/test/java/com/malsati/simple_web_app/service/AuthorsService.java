@@ -41,7 +41,7 @@ public class AuthorsService extends CrudServiceORM<
             !createOneAuthorInputDto.getBookIds().isEmpty()) {
             var books =  bookRepository.findAllById(createOneAuthorInputDto.getBookIds());
             for (var book: books) {
-                book.setAuthor(entityToCreate);
+                book.getAuthors().add(entityToCreate);
             }
             entityToCreate.setBooks(books);
         }
@@ -58,7 +58,7 @@ public class AuthorsService extends CrudServiceORM<
         }
         if (createOneAuthorInputDto.getBookIds() == null) {
             validations.add(
-                    new AppError(ErrorCode.RequiredField, "required field: booksIds")
+                    new AppError(ErrorCode.RequiredField, "required field: bookIds")
             );
         }
 
@@ -116,7 +116,7 @@ public class AuthorsService extends CrudServiceORM<
 
     private void setBooksAuthor(Iterable<Book> books, Author author) {
         for(var book: books) {
-            book.setAuthor(author);
+            book.getAuthors().add(author);
         }
     }
 }

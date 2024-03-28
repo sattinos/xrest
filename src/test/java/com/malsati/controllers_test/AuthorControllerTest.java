@@ -1,7 +1,5 @@
 package com.malsati.controllers_test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.PrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -30,7 +28,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -75,7 +72,7 @@ public class AuthorControllerTest {
         var createOneAuthorInputDto = new CreateOneAuthorInputDto(
                 "John Steward",
                 LocalDate.of(1970, 12, 10),
-                new ArrayList<>(Arrays.asList(27L))
+                new ArrayList<>(Arrays.asList(1L))
         );
 
         Pair<ServiceResponse<CreateOneAuthorOutputDto>, MvcResult> created = this.jsonRestHitter.postRequest(url, createOneAuthorInputDto,
@@ -113,12 +110,12 @@ public class AuthorControllerTest {
                 new CreateOneAuthorInputDto(
                         "Adriana Pineda",
                         LocalDate.of(2000, 12, 10),
-                        new ArrayList<>(Arrays.asList(26L))
+                        new ArrayList<>(Arrays.asList(3L))
                 ),
                 new CreateOneAuthorInputDto(
                         "Tyree Hansen",
                         LocalDate.of(1975, 5, 4),
-                        new ArrayList<>(Arrays.asList(25L))
+                        new ArrayList<>(Arrays.asList(4L))
                 )
         };
 
@@ -348,7 +345,7 @@ public class AuthorControllerTest {
                   "lhs": {
                     "op": "<",
                     "lhs": "birthDate",
-                    "rhs": "1900-01-01",
+                    "rhs": "1940-01-01",
                     "type": "Date"
                   },
                   "rhs": {

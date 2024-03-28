@@ -26,8 +26,8 @@ public abstract class BaseEntity<TKeyType extends Serializable> {
     @Column(name = "updated_by")
     protected String updatedBy;
 
-    @Column(name = "is_deleted")
-    protected boolean isDeleted = false;
+    @Column(name = "is_deleted", columnDefinition = "boolean default false")
+    protected Boolean isDeleted = false;
 
     public boolean getIsDeleted() {
         return isDeleted;

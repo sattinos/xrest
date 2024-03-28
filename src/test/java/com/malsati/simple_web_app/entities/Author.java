@@ -26,7 +26,12 @@ public class Author extends BaseEntity<Long> {
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
+    @ManyToMany
+    @JoinTable(
+            name = "author_books",
+            joinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id")
+    )
     @JsonManagedReference
     private List<Book> books;
 }

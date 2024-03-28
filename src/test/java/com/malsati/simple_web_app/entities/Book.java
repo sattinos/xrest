@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @NoArgsConstructor
 @Data
@@ -29,10 +30,9 @@ public class Book extends BaseEntity<Long> {
     @Column(name = "no_pages")
     private int noPages;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id", nullable = true)
+    @ManyToMany(mappedBy = "books")
     @JsonBackReference
-    private Author author;
+    private List<Author> authors;
 
     public Book(Long id) {
         this.id = id;

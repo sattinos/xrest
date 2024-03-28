@@ -12,3 +12,7 @@
 1.0.3
 =====
     [update] readme file
+
+1.0.4
+=====
+    [modify] change Author and Book relation to be Many to Many

@@ -44,7 +44,6 @@ public interface AuthorMapper extends IMapper<Author,
     @Override
     List<DeleteOneAuthorOutputDto> entitiesToDeleteManyOutputDto(List<Author> entity);
     @Override
-    @Mapping(source = "books", target = "bookIds")
     GetOneAuthorOutputDto entityToGetOneoutputDto(Author entity);
 
     default List<Book> mapBookIdsToBooks(Collection<Long> bookIds) {
