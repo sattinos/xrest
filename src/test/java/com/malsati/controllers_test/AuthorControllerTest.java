@@ -178,7 +178,7 @@ public class AuthorControllerTest {
                   },
                   "rhs": {
                     "op": "!=",
-                    "lhs": "isDeleted",
+                    "lhs": "deleted",
                     "rhs": true
                   }
                 }
@@ -350,7 +350,7 @@ public class AuthorControllerTest {
                   },
                   "rhs": {
                     "op": "!=",
-                    "lhs": "isDeleted",
+                    "lhs": "deleted",
                     "rhs": true
                   }
                 }

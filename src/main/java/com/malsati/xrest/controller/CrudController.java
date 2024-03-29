@@ -12,10 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.malsati.xrest.entities.BaseEntity;
 import com.malsati.xrest.service.CrudService;
 
-public abstract class CrudController<T extends BaseEntity<TKeyType>,
+public abstract class CrudController<T,
         TKeyType extends Serializable,
         CreateOneInputDto,
         CreateOneOutputDto,

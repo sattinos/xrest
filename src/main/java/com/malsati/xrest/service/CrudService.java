@@ -7,9 +7,8 @@ import com.malsati.xrest.dto.pagination.PaginatedResponse;
 import org.springframework.data.domain.Pageable;
 
 import com.malsati.xrest.dto.ServiceResponse;
-import com.malsati.xrest.entities.BaseEntity;
 
-public interface CrudService<T extends BaseEntity<TKeyType>,
+public interface CrudService<T,
         TKeyType extends Serializable,
         CreateOneInputDto,
         CreateOneOutputDto,

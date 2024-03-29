@@ -1,21 +1,21 @@
 package com.malsati.simple_web_app.entities;
 
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.malsati.xrest.entities.audit.base_classes.DeleteEntity;
+import com.malsati.xrest.entities.audit.base_classes.FullAuditEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import com.malsati.xrest.entities.BaseEntity;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
 @Entity
 @Table(name = "Author")
-public class Author extends BaseEntity<Long> {
+public class Author extends FullAuditEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;

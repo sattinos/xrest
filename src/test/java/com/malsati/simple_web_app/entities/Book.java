@@ -1,7 +1,7 @@
 package com.malsati.simple_web_app.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.malsati.xrest.entities.BaseEntity;
+import com.malsati.xrest.entities.audit.base_classes.CreateEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "Book")
-public class Book extends BaseEntity<Long> {
+public class Book extends CreateEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;

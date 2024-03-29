@@ -1,11 +1,9 @@
 package com.malsati.xrest.mapper;
 
-import com.malsati.xrest.entities.BaseEntity;
-
 import java.io.Serializable;
 import java.util.List;
 
-public interface IMapper<T extends BaseEntity<TKeyType>,
+public interface IMapper<T,
         TKeyType extends Serializable,
         CreateOneInputDto,
         CreateOneOutputDto,
