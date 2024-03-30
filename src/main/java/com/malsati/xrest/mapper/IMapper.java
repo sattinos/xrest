@@ -14,7 +14,7 @@ public interface IMapper<T,
     CreateOneOutputDto entityToCreateOneOutputDto(T entity);
     List<T> createManyInputDtoToEntities(Iterable<CreateOneInputDto> createManyInputDto);
     List<CreateOneOutputDto> entitiesToCreateManyOutputDto(List<T> entities);
-    T updateOneInputDtoToEntity(UpdateOneInputDto updateOneInputDto);
+    void updateOneInputDtoToEntity(UpdateOneInputDto updateOneInputDto, T entity);
     DeleteOneOutputDto entityToDeleteOneOutputDto(T entity);
     List<DeleteOneOutputDto> entitiesToDeleteManyOutputDto(List<T> entity);
     GetOneOutputDto entityToGetOneoutputDto(T entity);

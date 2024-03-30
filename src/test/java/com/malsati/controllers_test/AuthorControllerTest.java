@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.malsati.simple_web_app.dto.author.*;
 import com.malsati.simple_web_app.infrastructure.BookRepository;
 import com.malsati.simple_web_app.utils.json.JsonPrinter;
+import com.malsati.utilities.LogHelper;
 import com.malsati.utilities.json.JsonRestHitter;
 import com.malsati.xrest.controller.CrudEndpoints;
 import com.malsati.xrest.dto.ServiceResponse;
@@ -79,7 +80,7 @@ public class AuthorControllerTest {
                 new TypeReference<ServiceResponse<CreateOneAuthorOutputDto>>() {
                 });
         assert(created.second().getResponse().getStatus() == HttpStatus.CREATED.value());
-        printMvcResult("CreateOne", created.second());
+        LogHelper.printMvcResult("CreateOne", created.second());
 
         ServiceResponse<GetOneAuthorOutputDto> r = getOneById(created.first().data().getId());
         JsonPrinter.prettyPrint(r);
@@ -99,7 +100,7 @@ public class AuthorControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createOneAuthorInputDto))
         ).andExpect(status().isConflict()).andReturn();
-        printMvcResult("CreateOne Failure Case 01:", mvcResult);
+        LogHelper.printMvcResult("CreateOne Failure Case 01:", mvcResult);
     }
 
     @Test
@@ -124,7 +125,7 @@ public class AuthorControllerTest {
                 });
         assert(created.second().getResponse().getStatus() == HttpStatus.CREATED.value());
 
-        printMvcResult("CreateMany", created.second());
+        LogHelper.printMvcResult("CreateMany", created.second());
 
         ServiceResponse<GetOneAuthorOutputDto> firstCreatedAuthor = getOneById(created.first().data()[0].getId());
         ServiceResponse<GetOneAuthorOutputDto> secondCreatedAuthor = getOneById(created.first().data()[1].getId());
@@ -161,7 +162,7 @@ public class AuthorControllerTest {
         assert(created.first().errors()[0].equals(new AppError(ErrorCode.InvalidInput, "book id = 35 not found", 35)));
         assert(created.second().getResponse().getStatus() == HttpStatus.CONFLICT.value());
 
-        printMvcResult("createManyFailureCase01", created.second());
+        LogHelper.printMvcResult("createManyFailureCase01", created.second());
     }
 
     @Test
@@ -189,7 +190,7 @@ public class AuthorControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(condition)
         ).andExpect(status().isOk()).andReturn();
-        printMvcResult("getOneTest with condition", mvcResult);
+        LogHelper.printMvcResult("getOneTest with condition", mvcResult);
     }
 
     @Test
@@ -209,7 +210,7 @@ public class AuthorControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(condition)
         ).andExpect(status().isBadRequest()).andReturn();
-        printMvcResult("getOneNoResultsTest with condition", mvcResult);
+        LogHelper.printMvcResult("getOneNoResultsTest with condition", mvcResult);
     }
 
     @Test
@@ -218,7 +219,7 @@ public class AuthorControllerTest {
         var url = String.format("%s%s/%d", authorControllerBaseUrl, CrudEndpoints.GET_ONE, 1);
         var mvcResult = this.restHitter.perform(get(url))
                 .andExpect(status().isOk()).andReturn();
-        printMvcResult("getOneByIdTest", mvcResult);
+        LogHelper.printMvcResult("getOneByIdTest", mvcResult);
     }
 
     ServiceResponse<GetOneAuthorOutputDto> getOneById(Long id) throws Exception {
@@ -254,7 +255,7 @@ public class AuthorControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateOneAuthorInputDto))
         ).andExpect(status().isOk()).andReturn();
-        printMvcResult("updateOneTest", mvcResult);
+        LogHelper.printMvcResult("updateOneTest", mvcResult);
 
         var updatedEntity = getOneById(updateOneAuthorInputDto.getId());
         var entityJson = JsonPrinter.toPrettyJson(updatedEntity);
@@ -279,7 +280,7 @@ public class AuthorControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateOneAuthorInputDto))
         ).andExpect(status().isBadRequest()).andReturn();
-        printMvcResult("updateOneTestFailureCase01", mvcResult);
+        LogHelper.printMvcResult("updateOneTestFailureCase01", mvcResult);
     }
 
     @Test
@@ -304,7 +305,7 @@ public class AuthorControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateManyAuthorsInputDto))
         ).andExpect(status().isOk()).andReturn();
-        printMvcResult("updateManyTest", mvcResult);
+        LogHelper.printMvcResult("updateManyTest", mvcResult);
 
         for(var updateOneAuthorInputDto: updateManyAuthorsInputDto) {
             var updatedEntity = getOneById(updateOneAuthorInputDto.getId());
@@ -377,7 +378,7 @@ public class AuthorControllerTest {
         Pair<ServiceResponse<Long>, MvcResult> countsResult = jsonRestHitter.getRequest(url, null, typeReference);
 
         assertTrue(countsResult.first().isSuccess());
-        printMvcResult("countNoConditionTest", countsResult.second());
+        LogHelper.printMvcResult("countNoConditionTest", countsResult.second());
     }
 
     private Long countEntities() throws Exception {
@@ -405,7 +406,7 @@ public class AuthorControllerTest {
 
         assertTrue(countsResult.first().isSuccess());
         assert (countsResult.first().data() == 2);
-        printMvcResult("countWithConditionTest", countsResult.second());
+        LogHelper.printMvcResult("countWithConditionTest", countsResult.second());
     }
 
     @Test
@@ -417,7 +418,7 @@ public class AuthorControllerTest {
 
         assertTrue(countsResult.first().isSuccess());
         assert (countsResult.first().data().getId() == 1);
-        printMvcResult("deleteOneById", countsResult.second());
+        LogHelper.printMvcResult("deleteOneById", countsResult.second());
 
         getManyTest(7L);
     }
@@ -440,7 +441,7 @@ public class AuthorControllerTest {
         TypeReference<ServiceResponse<List<DeleteOneAuthorOutputDto>>> typeReference = new TypeReference<>() {};
         Pair<ServiceResponse<List<DeleteOneAuthorOutputDto>>, MvcResult> deleteManyResult = jsonRestHitter.deleteRequest(url, condition, typeReference);
         assertTrue(deleteManyResult.first().isSuccess());
-        printMvcResult("deleteMany", deleteManyResult.second());
+        LogHelper.printMvcResult("deleteMany", deleteManyResult.second());
 
         System.out.printf("Count before deletion: %d\n", countBeforeDeletion);
 
@@ -453,16 +454,5 @@ public class AuthorControllerTest {
         getManyTest(countAfterDeletion);
     }
 
-    private static void printMvcResult(String title, MvcResult mvcResult) throws Exception {
-        var body = mvcResult.getRequest().getContentAsString();
-        System.out.println("");
-        System.out.printf("================ %s =================================\n", title);
-        System.out.printf("url: %s\n", mvcResult.getRequest().getRequestURI());
-        System.out.printf("status code: %d\n", mvcResult.getResponse().getStatus());
-        if (!StringExtensions.IsNullOrEmpty(body)) {
-            System.out.printf("request body: %s\n", body);
-        }
-        System.out.printf("response body: %s\n", mvcResult.getResponse().getContentAsString());
-        System.out.println("=================================================\n");
-    }
+
 }

@@ -37,10 +37,10 @@ public class AuthorsService extends CrudServiceORM<
 
     @Override
     protected void onPreCreateOne(CreateOneAuthorInputDto createOneAuthorInputDto, Author entityToCreate) {
-        if(  createOneAuthorInputDto.getBookIds() != null &&
-            !createOneAuthorInputDto.getBookIds().isEmpty()) {
-            var books =  bookRepository.findAllById(createOneAuthorInputDto.getBookIds());
-            for (var book: books) {
+        if (createOneAuthorInputDto.getBookIds() != null &&
+                !createOneAuthorInputDto.getBookIds().isEmpty()) {
+            var books = bookRepository.findAllById(createOneAuthorInputDto.getBookIds());
+            for (var book : books) {
                 book.getAuthors().add(entityToCreate);
             }
             entityToCreate.setBooks(books);
@@ -62,9 +62,9 @@ public class AuthorsService extends CrudServiceORM<
             );
         }
 
-        if( createOneAuthorInputDto.getBookIds() != null ) {
-            for (var bookId: createOneAuthorInputDto.getBookIds()) {
-                if( !bookRepository.existsById(bookId) ) {
+        if (createOneAuthorInputDto.getBookIds() != null) {
+            for (var bookId : createOneAuthorInputDto.getBookIds()) {
+                if (!bookRepository.existsById(bookId)) {
                     validations.add(
                             new AppError(ErrorCode.InvalidInput, "book id = %d not found".formatted(bookId), bookId)
                     );
@@ -76,18 +76,9 @@ public class AuthorsService extends CrudServiceORM<
     }
 
     @Override
-    public Pair<ArrayList<AppError>, Author> validateUpdateOneInput(UpdateOneAuthorInputDto updateOneAuthorInputDto) {
+    public ArrayList<AppError> validateUpdateOneInput(UpdateOneAuthorInputDto updateOneAuthorInputDto, Author author) {
         ArrayList<AppError> validations = new ArrayList<>();
         AuthorRepository repo = (AuthorRepository) this.jpaRepository;
-
-        if (updateOneAuthorInputDto.getId() == null) {
-            validations.add(
-                    new AppError(ErrorCode.RequiredField, "required field: id.")
-            );
-            return new Pair<>(validations, null);
-        }
-
-        Author author = jpaRepository.findById(updateOneAuthorInputDto.getId()).get();
         if (updateOneAuthorInputDto.getFullName() != null &&
                 !author.getFullName().contentEquals(updateOneAuthorInputDto.getFullName()) &&
                 repo.existsByFullName(updateOneAuthorInputDto.getFullName())) {
@@ -95,18 +86,18 @@ public class AuthorsService extends CrudServiceORM<
                     new AppError(ErrorCode.AlreadyFound, "author fullname already found.", updateOneAuthorInputDto.getFullName())
             );
         }
-        return new Pair<>(validations, author);
+        return validations;
     }
 
     @Override
     protected void onPreUpdateOne(UpdateOneAuthorInputDto updateOneAuthorInputDto, Author author) {
-        if( updateOneAuthorInputDto.getFullName() != null) {
+        if (updateOneAuthorInputDto.getFullName() != null) {
             author.setFullName(updateOneAuthorInputDto.getFullName());
         }
-        if(updateOneAuthorInputDto.getBirthDate() != null) {
+        if (updateOneAuthorInputDto.getBirthDate() != null) {
             author.setBirthDate(updateOneAuthorInputDto.getBirthDate());
         }
-        if( updateOneAuthorInputDto.getBookIds() != null) {
+        if (updateOneAuthorInputDto.getBookIds() != null) {
             var books = bookRepository.findAllById(updateOneAuthorInputDto.getBookIds());
             setBooksAuthor(books, author);
             setBooksAuthor(author.getBooks(), null);
@@ -115,7 +106,7 @@ public class AuthorsService extends CrudServiceORM<
     }
 
     private void setBooksAuthor(Iterable<Book> books, Author author) {
-        for(var book: books) {
+        for (var book : books) {
             book.getAuthors().add(author);
         }
     }

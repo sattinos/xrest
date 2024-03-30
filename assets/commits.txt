@@ -22,3 +22,10 @@
     [modify] Hard/Soft Delete Support
     [add] Audit Interfaces: Create, Update, Delete
     [modify] The library is no more tied to baseEntity. It can be used with 100% user-defined base entity
+
+1.0.6
+=====
+    [fix] Handling Null values in Mapper
+    [add] BookController test cases:
+        GET_ONE, GET_MANY, COUNT, CREATE_ONE, CREATE_MANY, UPDATE_ONE, UPDATE_MANY, DELETE_ONE, DELETE_MANY
+    [modify] PreUpdate, PreCreate is now optional

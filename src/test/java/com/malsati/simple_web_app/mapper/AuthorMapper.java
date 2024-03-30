@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.mapstruct.IterableMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 import com.malsati.simple_web_app.dto.author.*;
 import com.malsati.simple_web_app.entities.Author;
 import com.malsati.simple_web_app.entities.Book;
 import com.malsati.xrest.mapper.IMapper;
-import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring")
 public interface AuthorMapper extends IMapper<Author,
@@ -37,7 +34,7 @@ public interface AuthorMapper extends IMapper<Author,
     List<CreateOneAuthorOutputDto> entitiesToCreateManyOutputDto(List<Author> entities);
     @Override
     @Mapping(source = "bookIds", target = "books")
-    Author updateOneInputDtoToEntity(UpdateOneAuthorInputDto updateOneAuthorInputDto);
+    void updateOneInputDtoToEntity(UpdateOneAuthorInputDto updateOneAuthorInputDto, @MappingTarget Author author);
     @Override
     @Mapping(source = "books", target = "bookIds")
     DeleteOneAuthorOutputDto entityToDeleteOneOutputDto(Author entity);

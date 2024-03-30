@@ -10,6 +10,7 @@ import java.util.Optional;
 import com.malsati.xrest.dto.errors.ErrorCode;
 import com.malsati.xrest.dto.pagination.PaginatedResponse;
 import com.malsati.xrest.entities.audit.interfaces.DeletionInfo;
+import com.malsati.xrest.entities.audit.interfaces.IdentityInfo;
 import com.malsati.xrest.infrastructure.jpql.SpecificationBuilder;
 import com.malsati.xrest.mapper.IMapper;
 import com.malsati.xrest.mapper.PaginationMapper;
@@ -30,7 +31,7 @@ public abstract class CrudServiceORM<T,
         TKeyType extends Serializable,
         CreateOneInputDto,
         CreateOneOutputDto,
-        UpdateOneInputDto,
+        UpdateOneInputDto extends IdentityInfo<TKeyType>,
         DeleteOneOutputDto,
         GetOneOutputDto> implements CrudService<T, TKeyType, CreateOneInputDto, CreateOneOutputDto, UpdateOneInputDto, DeleteOneOutputDto, GetOneOutputDto> {
     private static final String isNotDeletedCondition = "{ \"op\": \"=\", \"lhs\": \"deleted\", \"rhs\": false }";
@@ -52,7 +53,7 @@ public abstract class CrudServiceORM<T,
     @Override
     public ServiceResponse<CreateOneOutputDto> createOne(CreateOneInputDto createOneInputDto) {
         var validationResult = validateCreateOneInput(createOneInputDto);
-        if (!validationResult.isEmpty()) {
+        if (validationResult != null && !validationResult.isEmpty()) {
             return new ServiceResponse<>(validationResult);
         }
         T entity = mapper.createOneInputDtoToEntity(createOneInputDto);
@@ -62,9 +63,8 @@ public abstract class CrudServiceORM<T,
         return new ServiceResponse<CreateOneOutputDto>(createdOutputDto);
     }
 
-    protected abstract void onPreCreateOne(CreateOneInputDto createOneInputDto, T entityToCreate);
-
-    protected abstract void onPreUpdateOne(UpdateOneInputDto updateOneInputDto, T entityToUpdate);
+    protected void onPreCreateOne(CreateOneInputDto createOneInputDto, T entityToCreate) {}
+    protected void onPreUpdateOne(UpdateOneInputDto updateOneInputDto, T entityToUpdate) {}
 
     @Override
     public ServiceResponse<CreateOneOutputDto[]> createMany(Iterable<CreateOneInputDto> createManyInputDto) {
@@ -88,18 +88,40 @@ public abstract class CrudServiceORM<T,
         }
     }
 
+    /*
+     * The basic validation when updating any entity.
+     * @param updateOneInputDto : The update input Dto, should have implemented IdentityInfo<>
+     * @return (null, errorValidation) in case of any validation error
+     *         (entity, null) in case of validation success, the entity will be returned as a result as well
+     */
+    private Pair<ArrayList<AppError>, T> basicValidateUpdateOneInputDto(UpdateOneInputDto updateOneInputDto) {
+        if (updateOneInputDto.getId() == null) {
+            var error = new AppError(ErrorCode.RequiredField, "required field: id.");
+            return new Pair<>(new ArrayList<>(List.of(error)) , null);
+        }
+        T entity = jpaRepository.findById(updateOneInputDto.getId()).orElse(null);
+        if (entity == null) {
+            var error = new AppError(ErrorCode.InvalidInput, "wrong id value", updateOneInputDto.getId());
+            return new Pair<>(new ArrayList<>(List.of(error)), null);
+        }
+        return new Pair<>(null, entity);
+    }
+
     @Override
     public ServiceResponse<Boolean> updateOne(UpdateOneInputDto updateOneInputDto) {
-        var validationResult = validateUpdateOneInput(updateOneInputDto);
-        if (validationResult == null) {
-            // Need to implement validateUpdateOneInput in a subclass
-            return new ServiceResponse<>(false);
+        var basicValidationResult = basicValidateUpdateOneInputDto(updateOneInputDto);
+        if( basicValidationResult.second() == null) {
+            return new ServiceResponse<Boolean>(basicValidationResult.first());
         }
-        if (!validationResult.first().isEmpty()) {
-            return new ServiceResponse<>(validationResult.first());
+        T entity = basicValidationResult.second();
+        var validationResult = validateUpdateOneInput(updateOneInputDto, entity);
+        if (validationResult != null && !validationResult.isEmpty()) {
+            return new ServiceResponse<>(validationResult);
         }
-        var entity = validationResult.second();
+        mapper.updateOneInputDtoToEntity(updateOneInputDto, entity);
+
         onPreUpdateOne(updateOneInputDto, entity);
+
         this.jpaRepository.save(entity);
         return new ServiceResponse<>(true);
     }
@@ -128,16 +150,25 @@ public abstract class CrudServiceORM<T,
         }
     }
 
-    public abstract ArrayList<AppError> validateCreateOneInput(CreateOneInputDto createOneInputDto);
+    /*
+        Returns an empty array of AppError of validation passes
+        Otherwise, it will contain list of validation errors
+    * */
+    public ArrayList<AppError> validateCreateOneInput(CreateOneInputDto createOneInputDto) {
+        return null;
+    }
 
-    public abstract Pair<ArrayList<AppError>, T> validateUpdateOneInput(UpdateOneInputDto updateOneInputDto);
+    public ArrayList<AppError> validateUpdateOneInput(UpdateOneInputDto updateOneInputDto, T entity) {
+        return null;
+    }
 
     private ArrayList<AppError> validateCreateManyInput(Iterable<CreateOneInputDto> createManyInputDto) {
         var allValidations = new ArrayList<AppError>();
         for (var createOneInputDto : createManyInputDto) {
             var validationResult = validateCreateOneInput(createOneInputDto);
-            if (validationResult != null) {
+            if (validationResult != null && !validationResult.isEmpty()) {
                 allValidations.addAll(validationResult);
+                return allValidations;
             }
         }
         return allValidations;
@@ -146,9 +177,15 @@ public abstract class CrudServiceORM<T,
     private ArrayList<Pair<ArrayList<AppError>, T>> validateUpdateManyInput(Iterable<UpdateOneInputDto> updateManyInputDto) {
         var allValidations = new ArrayList<Pair<ArrayList<AppError>, T>>();
         for (var updateOneInputDto : updateManyInputDto) {
-            var validationResult = validateUpdateOneInput(updateOneInputDto);
-            allValidations.add(validationResult);
-            if (validationResult.second() == null) {
+            var result = basicValidateUpdateOneInputDto(updateOneInputDto);
+            allValidations.add(result);
+            if( result.first() != null) {
+                return allValidations;
+            }
+
+            var validationResult = validateUpdateOneInput(updateOneInputDto, result.second());
+            if(validationResult != null && !validationResult.isEmpty()) {
+                result.first().addAll(validationResult);
                 return allValidations;
             }
         }
@@ -164,7 +201,9 @@ public abstract class CrudServiceORM<T,
         if (specificationExecutor == null) {
             return new ServiceResponse<GetOneOutputDto>(new AppError(ErrorCode.InternalSystemError, "unable to find JpaSpecificationExecutor"));
         }
-        var criteria = specificationBuilder.buildWithAnd(condition, isNotDeletedCondition);
+        var criteria = isSoftDelete ? specificationBuilder.buildWithAnd(condition, isNotDeletedCondition) :
+                                      specificationBuilder.build(condition);
+
         Optional<T> entity = specificationExecutor.findOne(criteria);
         if (entity.isPresent()) {
             var outputDto = mapper.entityToGetOneoutputDto(entity.get());
