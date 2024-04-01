@@ -85,60 +85,67 @@ public class SpecificationBuilder<T extends Comparable> {
     }
 
     private Predicate isEqualPredicate(Root<T> root,
+                                       Join<T, ?> join,
                                        String operator,
                                        String fieldName,
                                        Object value,
                                        CriteriaBuilder criteriaBuilder) {
-        return criteriaBuilder.equal(root.get(fieldName), value);
+        return criteriaBuilder.equal(join != null ? join.get(fieldName) : root.get(fieldName), value);
     }
 
     private Predicate isNotEqualPredicate(Root<T> root,
-                                       String operator,
-                                       String fieldName,
-                                       Object value,
-                                       CriteriaBuilder criteriaBuilder) {
-        return criteriaBuilder.notEqual(root.get(fieldName), value);
+                                          Join<T, ?> join,
+                                          String operator,
+                                          String fieldName,
+                                          Object value,
+                                          CriteriaBuilder criteriaBuilder) {
+        return criteriaBuilder.notEqual(join != null ? join.get(fieldName) : root.get(fieldName), value);
     }
 
     private Predicate isLessOrEqualPredicate(Root<T> root,
+                                             Join<T, ?> join,
                                              String operator,
                                              String fieldName,
                                              Object value,
                                              CriteriaBuilder criteriaBuilder) {
-        return criteriaBuilder.lessThanOrEqualTo(root.get(fieldName), (Comparable) value);
+        return criteriaBuilder.lessThanOrEqualTo(join != null ? join.get(fieldName) : root.get(fieldName), (Comparable) value);
     }
 
     private Predicate isLessPredicate(Root<T> root,
-                                             String operator,
-                                             String fieldName,
-                                             Object value,
-                                             CriteriaBuilder criteriaBuilder) {
-        return criteriaBuilder.lessThan(root.get(fieldName), (Comparable) value);
+                                      Join<T, ?> join,
+                                      String operator,
+                                      String fieldName,
+                                      Object value,
+                                      CriteriaBuilder criteriaBuilder) {
+        return criteriaBuilder.lessThan(join != null ? join.get(fieldName) : root.get(fieldName), (Comparable) value);
     }
 
     private Predicate isGreaterPredicate(Root<T> root,
-                                      String operator,
-                                      String fieldName,
-                                      Object value,
-                                      CriteriaBuilder criteriaBuilder) {
-        return criteriaBuilder.greaterThan(root.get(fieldName), (Comparable) value);
+                                         Join<T, ?> join,
+                                         String operator,
+                                         String fieldName,
+                                         Object value,
+                                         CriteriaBuilder criteriaBuilder) {
+        return criteriaBuilder.greaterThan(join != null ? join.get(fieldName) : root.get(fieldName), (Comparable) value);
     }
 
     private Predicate isGreaterOrEqualPredicate(Root<T> root,
-                                      String operator,
-                                      String fieldName,
-                                      Object value,
-                                      CriteriaBuilder criteriaBuilder) {
-        return criteriaBuilder.greaterThanOrEqualTo(root.get(fieldName), (Comparable) value);
-    }
-
-    private Predicate isLikePredicate(Root<T> root,
+                                                Join<T, ?> join,
                                                 String operator,
                                                 String fieldName,
                                                 Object value,
                                                 CriteriaBuilder criteriaBuilder) {
+        return criteriaBuilder.greaterThanOrEqualTo(join != null ? join.get(fieldName) : root.get(fieldName), (Comparable) value);
+    }
+
+    private Predicate isLikePredicate(Root<T> root,
+                                      Join<T, ?> join,
+                                      String operator,
+                                      String fieldName,
+                                      Object value,
+                                      CriteriaBuilder criteriaBuilder) {
         var likeExpression = String.format("%s", value);
-        return criteriaBuilder.like(root.get(fieldName), likeExpression);
+        return criteriaBuilder.like(join != null ? join.get(fieldName) : root.get(fieldName), likeExpression);
     }
 
     private HashMap<String, BuilderPredicate<T>> binaryOperatorsMap = new HashMap<>();
@@ -152,15 +159,32 @@ public class SpecificationBuilder<T extends Comparable> {
         JsonNode lhs = node.get(MainTreeKeys.lhs);
         String operator = node.get(MainTreeKeys.operator).asText();
         String fieldName = lhs.asText();
+
+        Join<T, ?> join = null;
+        if (fieldName.contains(".")) { // Check for related entity
+            // Split the attribute path
+            String[] attributePath = fieldName.split("\\.");
+
+            // Navigate through the join for each attribute except the last one
+            join = root.join(attributePath[0]);
+            if (attributePath.length > 1) {
+                for (int i = 1; i < attributePath.length - 1; i++) {
+                    join = join.join(attributePath[i]);
+                }
+            }
+
+            fieldName = attributePath[attributePath.length - 1];
+        }
+
         JsonNode rhs = node.get(MainTreeKeys.rhs);
         JsonNode hint = node.get(MainTreeKeys.type);
 
-        if( !binaryOperatorsMap.containsKey(operator) ) {
+        if (!binaryOperatorsMap.containsKey(operator)) {
             throw new IllegalArgumentException("Unsupported binary operator");
         }
 
         Object value = null;
-        if( hint != null && hint.asText().equals("Date") ) {
+        if (hint != null && hint.asText().equals("Date")) {
             value = LocalDate.parse(rhs.asText());
         }
         if (value == null && rhs.isBoolean()) {
@@ -172,10 +196,10 @@ public class SpecificationBuilder<T extends Comparable> {
         if (value == null && rhs.isTextual()) {
             value = rhs.asText();
         }
-        if( value == null) {
+        if (value == null) {
             throw new IllegalArgumentException("Unsupported rhs data type");
         }
-        return binaryOperatorsMap.get(operator).execute(root, operator, fieldName, value, criteriaBuilder);
+        return binaryOperatorsMap.get(operator).execute(root, join, operator, fieldName, value, criteriaBuilder);
 
     }
 
@@ -191,20 +215,31 @@ public class SpecificationBuilder<T extends Comparable> {
         JsonNode rangeStart = node.get(MainTreeKeys.rangeStart);
         JsonNode rangeEnd = node.get(MainTreeKeys.rangeEnd);
 
+        Join<T, ?> join = null;
+        if (fieldName.contains(".")) {
+            String[] attributePath = fieldName.split("\\.");
+
+            join = root.join(attributePath[0]);
+            if (attributePath.length > 1) {
+                for (int i = 1; i < attributePath.length - 1; i++) {
+                    join = join.join(attributePath[i]);
+                }
+            }
+        }
 
         switch (operator) {
             case "between":
-                if( hint != null && hint.asText().equals("Date") ) {
+                if (hint != null && hint.asText().equals("Date")) {
                     LocalDate ranteStartAsDate = LocalDate.parse(rangeStart.asText());
                     LocalDate ranteEndAsDate = LocalDate.parse(rangeEnd.asText());
-                    return criteriaBuilder.between(root.get(fieldName), ranteStartAsDate, ranteEndAsDate);
+                    return criteriaBuilder.between(join != null ? join.get(fieldName) : root.get(fieldName), ranteStartAsDate, ranteEndAsDate);
                 }
 
                 if (rangeStart.isInt()) {
-                    return criteriaBuilder.between(root.get(fieldName), rangeStart.asInt(), rangeEnd.asInt());
+                    return criteriaBuilder.between(join != null ? join.get(fieldName) : root.get(fieldName), rangeStart.asInt(), rangeEnd.asInt());
                 }
                 if (rangeStart.isFloat()) {
-                    return criteriaBuilder.between(root.get(fieldName), rangeStart.asDouble(), rangeEnd.asDouble());
+                    return criteriaBuilder.between(join != null ? join.get(fieldName) : root.get(fieldName), rangeStart.asDouble(), rangeEnd.asDouble());
                 }
                 throw new IllegalArgumentException("Invalid rangeStart or rangeEnd data type");
 

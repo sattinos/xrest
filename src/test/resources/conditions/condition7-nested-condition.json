@@ -1,0 +1,5 @@
+{
+  "op": "=",
+  "lhs": "books.title",
+  "rhs": "Artificial Intelligence"
+}

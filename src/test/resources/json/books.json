@@ -1,0 +1,182 @@
+[
+  {
+    "title": "Algorithms",
+    "publishDate": "2010-09-14",
+    "edition": 3,
+    "volume": 1,
+    "press": "APress",
+    "noPages": 670,
+    "authorsIds": [1, 2]
+  },
+  {
+    "title": "Data Structures",
+    "publishDate": "2008-05-20",
+    "edition": 2,
+    "volume": 1,
+    "press": "Wiley",
+    "noPages": 550,
+    "authorsIds": [3, 4]
+  },
+  {
+    "title": "Machine Learning",
+    "publishDate": "2015-11-30",
+    "edition": 1,
+    "volume": 1,
+    "press": "Springer",
+    "noPages": 720,
+    "authorsIds": [5, 6]
+  },
+  {
+    "title": "Web Development",
+    "publishDate": "2012-07-10",
+    "edition": 2,
+    "volume": 1,
+    "press": "O'Reilly",
+    "noPages": 600,
+    "authorsIds": [7, 8]
+  },
+  {
+    "title": "Artificial Intelligence",
+    "publishDate": "2019-03-25",
+    "edition": 1,
+    "volume": 1,
+    "press": "MIT Press",
+    "noPages": 800,
+    "authorsIds": [9, 10]
+  },
+  {
+    "title": "Database Management",
+    "publishDate": "2011-10-05",
+    "edition": 3,
+    "volume": 1,
+    "press": "Pearson",
+    "noPages": 680,
+    "authorsIds": [1, 3]
+  },
+  {
+    "title": "Networking Essentials",
+    "publishDate": "2009-08-18",
+    "edition": 2,
+    "volume": 1,
+    "press": "McGraw-Hill",
+    "noPages": 540,
+    "authorsIds": [2, 4]
+  },
+  {
+    "title": "Software Engineering",
+    "publishDate": "2014-06-22",
+    "edition": 1,
+    "volume": 1,
+    "press": "Addison-Wesley",
+    "noPages": 700,
+    "authorsIds": [5, 7]
+  },
+  {
+    "title": "Cybersecurity Fundamentals",
+    "publishDate": "2016-12-10",
+    "edition": 2,
+    "volume": 1,
+    "press": "Sybex",
+    "noPages": 650,
+    "authorsIds": [8, 10]
+  },
+  {
+    "title": "Programming Languages",
+    "publishDate": "2007-04-15",
+    "edition": 4,
+    "volume": 1,
+    "press": "Cambridge University Press",
+    "noPages": 750,
+    "authorsIds": [1, 9]
+  },
+  {
+    "title": "Computer Graphics",
+    "publishDate": "2018-09-28",
+    "edition": 1,
+    "volume": 1,
+    "press": "Morgan Kaufmann",
+    "noPages": 720,
+    "authorsIds": [2, 5]
+  },
+  {
+    "title": "IoT Fundamentals",
+    "publishDate": "2017-11-05",
+    "edition": 2,
+    "volume": 1,
+    "press": "Packt",
+    "noPages": 680,
+    "authorsIds": [3, 6]
+  },
+  {
+    "title": "Cloud Computing",
+    "publishDate": "2013-05-12",
+    "edition": 3,
+    "volume": 1,
+    "press": "Manning",
+    "noPages": 800,
+    "authorsIds": [4, 7]
+  },
+  {
+    "title": "Big Data Analytics",
+    "publishDate": "2018-02-28",
+    "edition": 1,
+    "volume": 1,
+    "press": "Apress",
+    "noPages": 750,
+    "authorsIds": [5, 8]
+  },
+  {
+    "title": "Mobile App Development",
+    "publishDate": "2015-10-15",
+    "edition": 2,
+    "volume": 1,
+    "press": "Oxford University Press",
+    "noPages": 700,
+    "authorsIds": [6, 9]
+  },
+  {
+    "title": "Blockchain Technology",
+    "publishDate": "2019-08-20",
+    "edition": 1,
+    "volume": 1,
+    "press": "CRC Press",
+    "noPages": 780,
+    "authorsIds": [7, 10]
+  },
+  {
+    "title": "Quantum Computing",
+    "publishDate": "2014-04-08",
+    "edition": 2,
+    "volume": 1,
+    "press": "Elsevier",
+    "noPages": 730,
+    "authorsIds": [1, 2]
+  },
+  {
+    "title": "Robotics Engineering",
+    "publishDate": "2016-07-25",
+    "edition": 1,
+    "volume": 1,
+    "press": "Wiley",
+    "noPages": 690,
+    "authorsIds": [3, 4]
+  },
+  {
+    "title": "Art of Programming",
+    "publishDate": "2009-03-17",
+    "edition": 3,
+    "volume": 1,
+    "press": "Addison-Wesley",
+    "noPages": 760,
+    "authorsIds": [5, 6]
+  },
+  {
+    "title": "Digital Design",
+    "publishDate": "2012-12-30",
+    "edition": 2,
+    "volume": 1,
+    "press": "Prentice Hall",
+    "noPages": 690,
+    "authorsIds": [7, 8]
+  }
+]

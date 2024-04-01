@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Service
 public class AuthorsService extends CrudServiceORM<
@@ -53,7 +54,7 @@ public class AuthorsService extends CrudServiceORM<
         AuthorRepository repo = (AuthorRepository) this.jpaRepository;
         if (repo.existsByFullName(createOneAuthorInputDto.getFullName())) {
             validations.add(
-                    new AppError(ErrorCode.AlreadyFound, "author full name already found.", createOneAuthorInputDto.getFullName())
+                    new AppError(ErrorCode.AlreadyFound, "author full fullName already found.", createOneAuthorInputDto.getFullName())
             );
         }
         if (createOneAuthorInputDto.getBookIds() == null) {
@@ -80,6 +81,7 @@ public class AuthorsService extends CrudServiceORM<
         ArrayList<AppError> validations = new ArrayList<>();
         AuthorRepository repo = (AuthorRepository) this.jpaRepository;
         if (updateOneAuthorInputDto.getFullName() != null &&
+                author.getFullName() != null &&
                 !author.getFullName().contentEquals(updateOneAuthorInputDto.getFullName()) &&
                 repo.existsByFullName(updateOneAuthorInputDto.getFullName())) {
             validations.add(
@@ -99,15 +101,16 @@ public class AuthorsService extends CrudServiceORM<
         }
         if (updateOneAuthorInputDto.getBookIds() != null) {
             var books = bookRepository.findAllById(updateOneAuthorInputDto.getBookIds());
-            setBooksAuthor(books, author);
-            setBooksAuthor(author.getBooks(), null);
-            author.setBooks(books);
+            if( !books.isEmpty() ) {
+                author.setBooks(books);
+            }
         }
     }
 
-    private void setBooksAuthor(Iterable<Book> books, Author author) {
-        for (var book : books) {
-            book.getAuthors().add(author);
+    @Override
+    protected void onPreDeleteOne(Author authorToDelete) {
+        if (authorToDelete.getBooks() != null && !authorToDelete.getBooks().isEmpty()) {
+            authorToDelete.getBooks().clear();
         }
     }
 }

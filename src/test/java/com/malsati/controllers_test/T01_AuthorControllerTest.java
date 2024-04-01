@@ -13,7 +13,6 @@ import com.malsati.xrest.dto.ServiceResponse;
 import com.malsati.xrest.dto.errors.AppError;
 import com.malsati.xrest.dto.errors.ErrorCode;
 import com.malsati.xrest.dto.pagination.PaginatedResponse;
-import com.malsati.xrest.utilities.text.StringExtensions;
 
 import com.malsati.xrest.utilities.tuples.Pair;
 import org.junit.jupiter.api.MethodOrderer;
@@ -47,7 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AuthorControllerTest {
+public class T01_AuthorControllerTest {
     private static final String authorControllerBaseUrl = "/app/author";
 
     @Autowired
@@ -58,8 +57,8 @@ public class AuthorControllerTest {
 
     private ObjectMapper objectMapper;
 
-    public AuthorControllerTest(@Autowired MockMvc mockMvc,
-                                @Autowired ObjectMapper objectMapper) {
+    public T01_AuthorControllerTest(@Autowired MockMvc mockMvc,
+                                    @Autowired ObjectMapper objectMapper) {
         this.restHitter = mockMvc;
         this.objectMapper = objectMapper;
         this.jsonRestHitter = new JsonRestHitter(restHitter, objectMapper);
@@ -247,7 +246,7 @@ public class AuthorControllerTest {
                 authorEntityIdToUpdate,
                 "Giancarlo Harmon",
                 LocalDate.of(1960, 7, 4),
-                new ArrayList<>(Arrays.asList(20L, 3L, 6L))
+                new ArrayList<>(Arrays.asList(13L, 3L, 6L))
         );
 
         var mvcResult = this.restHitter.perform(
@@ -453,6 +452,4 @@ public class AuthorControllerTest {
 
         getManyTest(countAfterDeletion);
     }
-
-
 }

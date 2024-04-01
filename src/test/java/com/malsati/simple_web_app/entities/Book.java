@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -41,32 +42,9 @@ public class Book {
 
     @ManyToMany(mappedBy = "books")
     @JsonBackReference
-    private List<Author> authors;
+    private List<Author> authors = new ArrayList<>();
 
     public Book(Long id) {
         this.id = id;
-    }
-
-    public void set(String title,
-                    Integer edition,
-                    Integer volume,
-                    String press,
-                    Integer noPages) {
-        if( title != null) {
-            this.title = title;
-        }
-        if( edition != null) {
-            this.edition = edition;
-        }
-        if( volume != null) {
-            this.volume = volume;
-        }
-        if( press != null) {
-            this.press = press;
-        }
-
-        if( noPages != null) {
-            this.noPages = noPages;
-        }
     }
 }

@@ -17,6 +17,7 @@ import com.malsati.xrest.mapper.PaginationMapper;
 import com.malsati.xrest.utilities.text.StringExtensions;
 import com.malsati.xrest.utilities.tuples.Pair;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +28,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import com.malsati.xrest.dto.ServiceResponse;
 import com.malsati.xrest.dto.errors.AppError;
 
-public abstract class CrudServiceORM<T,
+public class CrudServiceORM<T,
         TKeyType extends Serializable,
         CreateOneInputDto,
         CreateOneOutputDto,
@@ -65,6 +66,14 @@ public abstract class CrudServiceORM<T,
 
     protected void onPreCreateOne(CreateOneInputDto createOneInputDto, T entityToCreate) {}
     protected void onPreUpdateOne(UpdateOneInputDto updateOneInputDto, T entityToUpdate) {}
+
+    protected void onPreDeleteOne(T entityToDelete) {}
+
+    private void onPreDeleteMany(List<T> entities) {
+        for (var entity: entities) {
+            onPreDeleteOne(entity);
+        }
+    }
 
     @Override
     public ServiceResponse<CreateOneOutputDto[]> createMany(Iterable<CreateOneInputDto> createManyInputDto) {
@@ -107,6 +116,7 @@ public abstract class CrudServiceORM<T,
         return new Pair<>(null, entity);
     }
 
+    @Transactional
     @Override
     public ServiceResponse<Boolean> updateOne(UpdateOneInputDto updateOneInputDto) {
         var basicValidationResult = basicValidateUpdateOneInputDto(updateOneInputDto);
@@ -277,6 +287,7 @@ public abstract class CrudServiceORM<T,
     }
 
     @Override
+    @Transactional
     public ServiceResponse<DeleteOneOutputDto> deleteOneById(TKeyType id) {
         if (id == null) {
             return new ServiceResponse<DeleteOneOutputDto>(new AppError(ErrorCode.RequiredField, "required field: id."));
@@ -290,10 +301,12 @@ public abstract class CrudServiceORM<T,
                 if (deleteEntity.getDeleted()) {
                     return new ServiceResponse<DeleteOneOutputDto>(new AppError(ErrorCode.AlreadyDeleted, "the entity is already deleted", id));
                 }
+                onPreDeleteOne(entity);
                 deleteEntity.setDeleted(true);
                 jpaRepository.save(entity);
             }
             if (!isSoftDelete) {
+                onPreDeleteOne(entity);
                 jpaRepository.deleteById(id);
             }
             var deleteOneOutputDto = mapper.entityToDeleteOneOutputDto(entity);
@@ -320,6 +333,7 @@ public abstract class CrudServiceORM<T,
             return new ServiceResponse<List<DeleteOneOutputDto>>(new AppError(ErrorCode.NotFound, "nothing was deleted."));
         }
         if (!isSoftDelete) {
+            onPreDeleteMany(entities);
             jpaRepository.deleteAll(entities);
         }
 
@@ -331,6 +345,7 @@ public abstract class CrudServiceORM<T,
                             new AppError(ErrorCode.AlreadyDeleted, String.format("the entity is already deleted: %s", entity))
                     );
                 }
+                onPreDeleteOne(entity);
                 deleteEntity.setDeleted(true);
                 deleteEntity.setDeletedAt(LocalDate.now());
                 // TODO: find a way to set deletedBy

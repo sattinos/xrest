@@ -11,7 +11,16 @@ spring:
     hibernate:
       ddl-auto: create-drop
     createDatabaseIfNotExist: true
+    properties:
+      hibernate:
+        format_sql: true
   h2:
     console.enabled: true
   jackson:
     default-property-inclusion: non_null
+logging:
+  level:
+    org:
+      hibernate:
+        sql: trace
+    sql: trace

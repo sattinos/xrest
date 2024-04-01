@@ -4,9 +4,12 @@ import com.malsati.xrest.entities.audit.interfaces.IdentityInfo;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
-public class UpdateOneBookInputDto extends CreateOneBookOutputDto implements IdentityInfo<Long> {
+public class UpdateOneBookInputDto extends CreateOneBookInputDto implements IdentityInfo<Long> {
+    private Long id;
 
     public UpdateOneBookInputDto(String title,
                                  LocalDate publishDate,
@@ -15,7 +18,8 @@ public class UpdateOneBookInputDto extends CreateOneBookOutputDto implements Ide
                                  String press,
                                  Integer noPages,
                                  Long id) {
-        super(title, publishDate, edition, volume, press, noPages, id);
+        super(title, publishDate, edition, volume, press, noPages, null);
+        this.id = id;
     }
 
     public UpdateOneBookInputDto(String title,
@@ -23,7 +27,8 @@ public class UpdateOneBookInputDto extends CreateOneBookOutputDto implements Ide
                                  int edition,
                                  int volume,
                                  Long id) {
-        super(title, publishDate, edition, volume, null , null, id);
+        super(title, publishDate, edition, volume, null , null, null);
+        this.id = id;
     }
 
     public UpdateOneBookInputDto(int edition,
@@ -31,13 +36,29 @@ public class UpdateOneBookInputDto extends CreateOneBookOutputDto implements Ide
                                  String press,
                                  int noPages,
                                  Long id) {
-        super(null, null, edition, volume, press, noPages, id);
+        super(null, null, edition, volume, press, noPages, null);
+        this.id = id;
     }
 
     public UpdateOneBookInputDto(String title,
                                  Integer edition,
                                  Integer volume,
                                  Long id) {
-        super(title, null, edition, volume, null, null, id);
+        super(title, null, edition, volume, null, null, null);
+        this.id = id;
+    }
+
+    public UpdateOneBookInputDto(String title,
+                                 Integer edition,
+                                 Integer volume,
+                                 Long id,
+                                 ArrayList<Long> authorsIds) {
+        super(title, null, edition, volume, null, null, authorsIds);
+        this.id = id;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
     }
 }

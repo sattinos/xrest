@@ -11,7 +11,7 @@ import com.malsati.simple_web_app.entities.Author;
 import com.malsati.simple_web_app.entities.Book;
 import com.malsati.xrest.mapper.IMapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface AuthorMapper extends IMapper<Author,
         Long,
         CreateOneAuthorInputDto,
@@ -44,6 +44,9 @@ public interface AuthorMapper extends IMapper<Author,
     GetOneAuthorOutputDto entityToGetOneoutputDto(Author entity);
 
     default List<Book> mapBookIdsToBooks(Collection<Long> bookIds) {
+        if( bookIds == null) {
+            return new ArrayList<>();
+        }
         var books = new ArrayList<Book>(bookIds.size());
         for (Long id: bookIds) {
             books.add(new Book(id));
@@ -52,6 +55,9 @@ public interface AuthorMapper extends IMapper<Author,
     }
 
     default List<Long> mapBooksToBookIds(Collection<Book> books) {
+        if( books == null) {
+            return new ArrayList<>();
+        }
         var bookIds = new ArrayList<Long>(books.size());
         for (var book: books) {
             bookIds.add(book.getId());

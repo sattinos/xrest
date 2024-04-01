@@ -1,0 +1,52 @@
+[
+  {
+    "fullName": "John Doe",
+    "birthDate": "1990-01-01",
+    "bookIds": []
+  },
+  {
+    "fullName": "Jane Smith",
+    "birthDate": "1988-05-15",
+    "bookIds": []
+  },
+  {
+    "fullName": "Michael Johnson",
+    "birthDate": "1975-11-30",
+    "bookIds": []
+  },
+  {
+    "fullName": "Emily Brown",
+    "birthDate": "1982-07-20",
+    "bookIds": []
+  },
+  {
+    "fullName": "William Wilson",
+    "birthDate": "1995-03-10",
+    "bookIds": []
+  },
+  {
+    "fullName": "Sophia Taylor",
+    "birthDate": "1989-09-05",
+    "bookIds": []
+  },
+  {
+    "fullName": "Matthew Anderson",
+    "birthDate": "1983-12-18",
+    "bookIds": []
+  },
+  {
+    "fullName": "Olivia Martinez",
+    "birthDate": "1978-04-25",
+    "bookIds": []
+  },
+  {
+    "fullName": "James Jackson",
+    "birthDate": "1992-06-28",
+    "bookIds": []
+  },
+  {
+    "fullName": "Ava Thompson",
+    "birthDate": "1980-02-14",
+    "bookIds": []
+  }
+]
