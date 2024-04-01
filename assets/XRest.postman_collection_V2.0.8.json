@@ -1,0 +1,1246 @@
+{
+	"info": {
+		"_postman_id": "529d4536-c1c1-44ba-90ea-ef271dffb841",
+		"name": "XRest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30945824"
+	},
+	"item": [
+		{
+			"name": "Author",
+			"item": [
+				{
+					"name": "getMany",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/app/author/getMany?pageNo=1&pageSize=50&sortDir=DESC",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"app",
+								"author",
+								"getMany"
+							],
+							"query": [
+								{
+									"key": "pageNo",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "50"
+								},
+								{
+									"key": "sortDir",
+									"value": "DESC"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success-empty-case",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/app/author/getMany?pageNo=1&pageSize=20&sortDir=DESC",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"app",
+										"author",
+										"getMany"
+									],
+									"query": [
+										{
+											"key": "pageNo",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "20"
+										},
+										{
+											"key": "sortDir",
+											"value": "DESC"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 01 Apr 2024 19:19:16 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"currentPage\": 1,\n        \"pageSize\": 20,\n        \"totalPages\": 1,\n        \"totalItems\": 4,\n        \"data\": [\n            {\n                \"id\": 4,\n                \"fullName\": \"Zeus Martin\",\n                \"birthDate\": \"1985-09-24\",\n                \"books\": []\n            },\n            {\n                \"id\": 3,\n                \"fullName\": \"John Snow\",\n                \"birthDate\": \"1985-09-24\",\n                \"books\": []\n            },\n            {\n                \"id\": 2,\n                \"fullName\": \"Peter Martin\",\n                \"birthDate\": \"1985-09-24\",\n                \"books\": []\n            },\n            {\n                \"id\": 1,\n                \"fullName\": \"Dario Snyder\",\n                \"birthDate\": \"1985-09-24\",\n                \"books\": []\n            }\n        ]\n    },\n    \"isSuccess\": true\n}"
+						},
+						{
+							"name": "success-mapped-with-books",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/app/author/getMany?pageNo=1&pageSize=50&sortDir=DESC",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"app",
+										"author",
+										"getMany"
+									],
+									"query": [
+										{
+											"key": "pageNo",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "50"
+										},
+										{
+											"key": "sortDir",
+											"value": "DESC"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 01 Apr 2024 20:18:14 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"currentPage\": 1,\n        \"pageSize\": 50,\n        \"totalPages\": 1,\n        \"totalItems\": 10,\n        \"data\": [\n            {\n                \"id\": 10,\n                \"fullName\": \"Ava Thompson\",\n                \"birthDate\": \"1980-02-14\",\n                \"books\": [\n                    {\n                        \"id\": 5,\n                        \"title\": \"Artificial Intelligence\",\n                        \"publishDate\": \"2019-03-25\",\n                        \"edition\": 1,\n                        \"volume\": 1,\n                        \"press\": \"MIT Press\",\n                        \"noPages\": 800,\n                        \"authors\": [\n                            {\n                                \"id\": 9,\n                                \"fullName\": \"James Jackson\"\n                            },\n                            {\n                                \"id\": 10,\n                                \"fullName\": \"Ava Thompson\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 9,\n                        \"title\": \"Cybersecurity Fundamentals\",\n                        \"publishDate\": \"2016-12-10\",\n                        \"edition\": 2,\n                        \"volume\": 1,\n                        \"press\": \"Sybex\",\n                        \"noPages\": 650,\n                        \"authors\": [\n                            {\n                                \"id\": 8,\n                                \"fullName\": \"Olivia Martinez\"\n                            },\n                            {\n                                \"id\": 10,\n                                \"fullName\": \"Ava Thompson\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 16,\n                        \"title\": \"Blockchain Technology\",\n                        \"publishDate\": \"2019-08-20\",\n                        \"edition\": 1,\n                        \"volume\": 1,\n                        \"press\": \"CRC Press\",\n                        \"noPages\": 780,\n                        \"authors\": [\n                            {\n                                \"id\": 7,\n                                \"fullName\": \"Matthew Anderson\"\n                            },\n                            {\n                                \"id\": 10,\n                                \"fullName\": \"Ava Thompson\"\n                            }\n                        ]\n                    }\n                ]\n            },\n            {\n                \"id\": 9,\n                \"fullName\": \"James Jackson\",\n                \"birthDate\": \"1992-06-28\",\n                \"books\": [\n                    {\n                        \"id\": 5,\n                        \"title\": \"Artificial Intelligence\",\n                        \"publishDate\": \"2019-03-25\",\n                        \"edition\": 1,\n                        \"volume\": 1,\n                        \"press\": \"MIT Press\",\n                        \"noPages\": 800,\n                        \"authors\": [\n                            {\n                                \"id\": 9,\n                                \"fullName\": \"James Jackson\"\n                            },\n                            {\n                                \"id\": 10,\n                                \"fullName\": \"Ava Thompson\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 10,\n                        \"title\": \"Programming Languages\",\n                        \"publishDate\": \"2007-04-15\",\n                        \"edition\": 4,\n                        \"volume\": 1,\n                        \"press\": \"Cambridge University Press\",\n                        \"noPages\": 750,\n                        \"authors\": [\n                            {\n                                \"id\": 1,\n                                \"fullName\": \"John Doe\"\n                            },\n                            {\n                                \"id\": 9,\n                                \"fullName\": \"James Jackson\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 15,\n                        \"title\": \"Mobile App Development\",\n                        \"publishDate\": \"2015-10-15\",\n                        \"edition\": 2,\n                        \"volume\": 1,\n                        \"press\": \"Oxford University Press\",\n                        \"noPages\": 700,\n                        \"authors\": [\n                            {\n                                \"id\": 6,\n                                \"fullName\": \"Sophia Taylor\"\n                            },\n                            {\n                                \"id\": 9,\n                                \"fullName\": \"James Jackson\"\n                            }\n                        ]\n                    }\n                ]\n            },\n            {\n                \"id\": 8,\n                \"fullName\": \"Olivia Martinez\",\n                \"birthDate\": \"1978-04-25\",\n                \"books\": [\n                    {\n                        \"id\": 4,\n                        \"title\": \"Web Development\",\n                        \"publishDate\": \"2012-07-10\",\n                        \"edition\": 2,\n                        \"volume\": 1,\n                        \"press\": \"O'Reilly\",\n                        \"noPages\": 600,\n                        \"authors\": [\n                            {\n                                \"id\": 7,\n                                \"fullName\": \"Matthew Anderson\"\n                            },\n                            {\n                                \"id\": 8,\n                                \"fullName\": \"Olivia Martinez\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 9,\n                        \"title\": \"Cybersecurity Fundamentals\",\n                        \"publishDate\": \"2016-12-10\",\n                        \"edition\": 2,\n                        \"volume\": 1,\n                        \"press\": \"Sybex\",\n                        \"noPages\": 650,\n                        \"authors\": [\n                            {\n                                \"id\": 8,\n                                \"fullName\": \"Olivia Martinez\"\n                            },\n                            {\n                                \"id\": 10,\n                                \"fullName\": \"Ava Thompson\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 14,\n                        \"title\": \"Big Data Analytics\",\n                        \"publishDate\": \"2018-02-28\",\n                        \"edition\": 1,\n                        \"volume\": 1,\n                        \"press\": \"Apress\",\n                        \"noPages\": 750,\n                        \"authors\": [\n                            {\n                                \"id\": 5,\n                                \"fullName\": \"William Wilson\"\n                            },\n                            {\n                                \"id\": 8,\n                                \"fullName\": \"Olivia Martinez\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 20,\n                        \"title\": \"Digital Design\",\n                        \"publishDate\": \"2012-12-30\",\n                        \"edition\": 2,\n                        \"volume\": 1,\n                        \"press\": \"Prentice Hall\",\n                        \"noPages\": 690,\n                        \"authors\": [\n                            {\n                                \"id\": 7,\n                                \"fullName\": \"Matthew Anderson\"\n                            },\n                            {\n                                \"id\": 8,\n                                \"fullName\": \"Olivia Martinez\"\n                            }\n                        ]\n                    }\n                ]\n            },\n            {\n                \"id\": 7,\n                \"fullName\": \"Matthew Anderson\",\n                \"birthDate\": \"1983-12-18\",\n                \"books\": [\n                    {\n                        \"id\": 4,\n                        \"title\": \"Web Development\",\n                        \"publishDate\": \"2012-07-10\",\n                        \"edition\": 2,\n                        \"volume\": 1,\n                        \"press\": \"O'Reilly\",\n                        \"noPages\": 600,\n                        \"authors\": [\n                            {\n                                \"id\": 7,\n                                \"fullName\": \"Matthew Anderson\"\n                            },\n                            {\n                                \"id\": 8,\n                                \"fullName\": \"Olivia Martinez\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 8,\n                        \"title\": \"Software Engineering\",\n                        \"publishDate\": \"2014-06-22\",\n                        \"edition\": 1,\n                        \"volume\": 1,\n                        \"press\": \"Addison-Wesley\",\n                        \"noPages\": 700,\n                        \"authors\": [\n                            {\n                                \"id\": 5,\n                                \"fullName\": \"William Wilson\"\n                            },\n                            {\n                                \"id\": 7,\n                                \"fullName\": \"Matthew Anderson\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 13,\n                        \"title\": \"Cloud Computing\",\n                        \"publishDate\": \"2013-05-12\",\n                        \"edition\": 3,\n                        \"volume\": 1,\n                        \"press\": \"Manning\",\n                        \"noPages\": 800,\n                        \"authors\": [\n                            {\n                                \"id\": 4,\n                                \"fullName\": \"Emily Brown\"\n                            },\n                            {\n                                \"id\": 7,\n                                \"fullName\": \"Matthew Anderson\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 16,\n                        \"title\": \"Blockchain Technology\",\n                        \"publishDate\": \"2019-08-20\",\n                        \"edition\": 1,\n                        \"volume\": 1,\n                        \"press\": \"CRC Press\",\n                        \"noPages\": 780,\n                        \"authors\": [\n                            {\n                                \"id\": 7,\n                                \"fullName\": \"Matthew Anderson\"\n                            },\n                            {\n                                \"id\": 10,\n                                \"fullName\": \"Ava Thompson\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 20,\n                        \"title\": \"Digital Design\",\n                        \"publishDate\": \"2012-12-30\",\n                        \"edition\": 2,\n                        \"volume\": 1,\n                        \"press\": \"Prentice Hall\",\n                        \"noPages\": 690,\n                        \"authors\": [\n                            {\n                                \"id\": 7,\n                                \"fullName\": \"Matthew Anderson\"\n                            },\n                            {\n                                \"id\": 8,\n                                \"fullName\": \"Olivia Martinez\"\n                            }\n                        ]\n                    }\n                ]\n            },\n            {\n                \"id\": 6,\n                \"fullName\": \"Sophia Taylor\",\n                \"birthDate\": \"1989-09-05\",\n                \"books\": [\n                    {\n                        \"id\": 3,\n                        \"title\": \"Machine Learning\",\n                        \"publishDate\": \"2015-11-30\",\n                        \"edition\": 1,\n                        \"volume\": 1,\n                        \"press\": \"Springer\",\n                        \"noPages\": 720,\n                        \"authors\": [\n                            {\n                                \"id\": 5,\n                                \"fullName\": \"William Wilson\"\n                            },\n                            {\n                                \"id\": 6,\n                                \"fullName\": \"Sophia Taylor\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 12,\n                        \"title\": \"IoT Fundamentals\",\n                        \"publishDate\": \"2017-11-05\",\n                        \"edition\": 2,\n                        \"volume\": 1,\n                        \"press\": \"Packt\",\n                        \"noPages\": 680,\n                        \"authors\": [\n                            {\n                                \"id\": 3,\n                                \"fullName\": \"Michael Johnson\"\n                            },\n                            {\n                                \"id\": 6,\n                                \"fullName\": \"Sophia Taylor\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 15,\n                        \"title\": \"Mobile App Development\",\n                        \"publishDate\": \"2015-10-15\",\n                        \"edition\": 2,\n                        \"volume\": 1,\n                        \"press\": \"Oxford University Press\",\n                        \"noPages\": 700,\n                        \"authors\": [\n                            {\n                                \"id\": 6,\n                                \"fullName\": \"Sophia Taylor\"\n                            },\n                            {\n                                \"id\": 9,\n                                \"fullName\": \"James Jackson\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 19,\n                        \"title\": \"Art of Programming\",\n                        \"publishDate\": \"2009-03-17\",\n                        \"edition\": 3,\n                        \"volume\": 1,\n                        \"press\": \"Addison-Wesley\",\n                        \"noPages\": 760,\n                        \"authors\": [\n                            {\n                                \"id\": 5,\n                                \"fullName\": \"William Wilson\"\n                            },\n                            {\n                                \"id\": 6,\n                                \"fullName\": \"Sophia Taylor\"\n                            }\n                        ]\n                    }\n                ]\n            },\n            {\n                \"id\": 5,\n                \"fullName\": \"William Wilson\",\n                \"birthDate\": \"1995-03-10\",\n                \"books\": [\n                    {\n                        \"id\": 3,\n                        \"title\": \"Machine Learning\",\n                        \"publishDate\": \"2015-11-30\",\n                        \"edition\": 1,\n                        \"volume\": 1,\n                        \"press\": \"Springer\",\n                        \"noPages\": 720,\n                        \"authors\": [\n                            {\n                                \"id\": 5,\n                                \"fullName\": \"William Wilson\"\n                            },\n                            {\n                                \"id\": 6,\n                                \"fullName\": \"Sophia Taylor\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 8,\n                        \"title\": \"Software Engineering\",\n                        \"publishDate\": \"2014-06-22\",\n                        \"edition\": 1,\n                        \"volume\": 1,\n                        \"press\": \"Addison-Wesley\",\n                        \"noPages\": 700,\n                        \"authors\": [\n                            {\n                                \"id\": 5,\n                                \"fullName\": \"William Wilson\"\n                            },\n                            {\n                                \"id\": 7,\n                                \"fullName\": \"Matthew Anderson\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 11,\n                        \"title\": \"Computer Graphics\",\n                        \"publishDate\": \"2018-09-28\",\n                        \"edition\": 1,\n                        \"volume\": 1,\n                        \"press\": \"Morgan Kaufmann\",\n                        \"noPages\": 720,\n                        \"authors\": [\n                            {\n                                \"id\": 2,\n                                \"fullName\": \"Jane Smith\"\n                            },\n                            {\n                                \"id\": 5,\n                                \"fullName\": \"William Wilson\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 14,\n                        \"title\": \"Big Data Analytics\",\n                        \"publishDate\": \"2018-02-28\",\n                        \"edition\": 1,\n                        \"volume\": 1,\n                        \"press\": \"Apress\",\n                        \"noPages\": 750,\n                        \"authors\": [\n                            {\n                                \"id\": 5,\n                                \"fullName\": \"William Wilson\"\n                            },\n                            {\n                                \"id\": 8,\n                                \"fullName\": \"Olivia Martinez\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 19,\n                        \"title\": \"Art of Programming\",\n                        \"publishDate\": \"2009-03-17\",\n                        \"edition\": 3,\n                        \"volume\": 1,\n                        \"press\": \"Addison-Wesley\",\n                        \"noPages\": 760,\n                        \"authors\": [\n                            {\n                                \"id\": 5,\n                                \"fullName\": \"William Wilson\"\n                            },\n                            {\n                                \"id\": 6,\n                                \"fullName\": \"Sophia Taylor\"\n                            }\n                        ]\n                    }\n                ]\n            },\n            {\n                \"id\": 4,\n                \"fullName\": \"Emily Brown\",\n                \"birthDate\": \"1982-07-20\",\n                \"books\": [\n                    {\n                        \"id\": 2,\n                        \"title\": \"Data Structures\",\n                        \"publishDate\": \"2008-05-20\",\n                        \"edition\": 2,\n                        \"volume\": 1,\n                        \"press\": \"Wiley\",\n                        \"noPages\": 550,\n                        \"authors\": [\n                            {\n                                \"id\": 3,\n                                \"fullName\": \"Michael Johnson\"\n                            },\n                            {\n                                \"id\": 4,\n                                \"fullName\": \"Emily Brown\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 7,\n                        \"title\": \"Networking Essentials\",\n                        \"publishDate\": \"2009-08-18\",\n                        \"edition\": 2,\n                        \"volume\": 1,\n                        \"press\": \"McGraw-Hill\",\n                        \"noPages\": 540,\n                        \"authors\": [\n                            {\n                                \"id\": 2,\n                                \"fullName\": \"Jane Smith\"\n                            },\n                            {\n                                \"id\": 4,\n                                \"fullName\": \"Emily Brown\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 13,\n                        \"title\": \"Cloud Computing\",\n                        \"publishDate\": \"2013-05-12\",\n                        \"edition\": 3,\n                        \"volume\": 1,\n                        \"press\": \"Manning\",\n                        \"noPages\": 800,\n                        \"authors\": [\n                            {\n                                \"id\": 4,\n                                \"fullName\": \"Emily Brown\"\n                            },\n                            {\n                                \"id\": 7,\n                                \"fullName\": \"Matthew Anderson\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 18,\n                        \"title\": \"Robotics Engineering\",\n                        \"publishDate\": \"2016-07-25\",\n                        \"edition\": 1,\n                        \"volume\": 1,\n                        \"press\": \"Wiley\",\n                        \"noPages\": 690,\n                        \"authors\": [\n                            {\n                                \"id\": 3,\n                                \"fullName\": \"Michael Johnson\"\n                            },\n                            {\n                                \"id\": 4,\n                                \"fullName\": \"Emily Brown\"\n                            }\n                        ]\n                    }\n                ]\n            },\n            {\n                \"id\": 3,\n                \"fullName\": \"Michael Johnson\",\n                \"birthDate\": \"1975-11-30\",\n                \"books\": [\n                    {\n                        \"id\": 2,\n                        \"title\": \"Data Structures\",\n                        \"publishDate\": \"2008-05-20\",\n                        \"edition\": 2,\n                        \"volume\": 1,\n                        \"press\": \"Wiley\",\n                        \"noPages\": 550,\n                        \"authors\": [\n                            {\n                                \"id\": 3,\n                                \"fullName\": \"Michael Johnson\"\n                            },\n                            {\n                                \"id\": 4,\n                                \"fullName\": \"Emily Brown\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 6,\n                        \"title\": \"Database Management\",\n                        \"publishDate\": \"2011-10-05\",\n                        \"edition\": 3,\n                        \"volume\": 1,\n                        \"press\": \"Pearson\",\n                        \"noPages\": 680,\n                        \"authors\": [\n                            {\n                                \"id\": 1,\n                                \"fullName\": \"John Doe\"\n                            },\n                            {\n                                \"id\": 3,\n                                \"fullName\": \"Michael Johnson\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 12,\n                        \"title\": \"IoT Fundamentals\",\n                        \"publishDate\": \"2017-11-05\",\n                        \"edition\": 2,\n                        \"volume\": 1,\n                        \"press\": \"Packt\",\n                        \"noPages\": 680,\n                        \"authors\": [\n                            {\n                                \"id\": 3,\n                                \"fullName\": \"Michael Johnson\"\n                            },\n                            {\n                                \"id\": 6,\n                                \"fullName\": \"Sophia Taylor\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 18,\n                        \"title\": \"Robotics Engineering\",\n                        \"publishDate\": \"2016-07-25\",\n                        \"edition\": 1,\n                        \"volume\": 1,\n                        \"press\": \"Wiley\",\n                        \"noPages\": 690,\n                        \"authors\": [\n                            {\n                                \"id\": 3,\n                                \"fullName\": \"Michael Johnson\"\n                            },\n                            {\n                                \"id\": 4,\n                                \"fullName\": \"Emily Brown\"\n                            }\n                        ]\n                    }\n                ]\n            },\n            {\n                \"id\": 2,\n                \"fullName\": \"Jane Smith\",\n                \"birthDate\": \"1988-05-15\",\n                \"books\": [\n                    {\n                        \"id\": 1,\n                        \"title\": \"Algorithms\",\n                        \"publishDate\": \"2010-09-14\",\n                        \"edition\": 3,\n                        \"volume\": 1,\n                        \"press\": \"APress\",\n                        \"noPages\": 670,\n                        \"authors\": [\n                            {\n                                \"id\": 1,\n                                \"fullName\": \"John Doe\"\n                            },\n                            {\n                                \"id\": 2,\n                                \"fullName\": \"Jane Smith\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 7,\n                        \"title\": \"Networking Essentials\",\n                        \"publishDate\": \"2009-08-18\",\n                        \"edition\": 2,\n                        \"volume\": 1,\n                        \"press\": \"McGraw-Hill\",\n                        \"noPages\": 540,\n                        \"authors\": [\n                            {\n                                \"id\": 2,\n                                \"fullName\": \"Jane Smith\"\n                            },\n                            {\n                                \"id\": 4,\n                                \"fullName\": \"Emily Brown\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 11,\n                        \"title\": \"Computer Graphics\",\n                        \"publishDate\": \"2018-09-28\",\n                        \"edition\": 1,\n                        \"volume\": 1,\n                        \"press\": \"Morgan Kaufmann\",\n                        \"noPages\": 720,\n                        \"authors\": [\n                            {\n                                \"id\": 2,\n                                \"fullName\": \"Jane Smith\"\n                            },\n                            {\n                                \"id\": 5,\n                                \"fullName\": \"William Wilson\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 17,\n                        \"title\": \"Quantum Computing\",\n                        \"publishDate\": \"2014-04-08\",\n                        \"edition\": 2,\n                        \"volume\": 1,\n                        \"press\": \"Elsevier\",\n                        \"noPages\": 730,\n                        \"authors\": [\n                            {\n                                \"id\": 1,\n                                \"fullName\": \"John Doe\"\n                            },\n                            {\n                                \"id\": 2,\n                                \"fullName\": \"Jane Smith\"\n                            }\n                        ]\n                    }\n                ]\n            },\n            {\n                \"id\": 1,\n                \"fullName\": \"John Doe\",\n                \"birthDate\": \"1990-01-01\",\n                \"books\": [\n                    {\n                        \"id\": 1,\n                        \"title\": \"Algorithms\",\n                        \"publishDate\": \"2010-09-14\",\n                        \"edition\": 3,\n                        \"volume\": 1,\n                        \"press\": \"APress\",\n                        \"noPages\": 670,\n                        \"authors\": [\n                            {\n                                \"id\": 1,\n                                \"fullName\": \"John Doe\"\n                            },\n                            {\n                                \"id\": 2,\n                                \"fullName\": \"Jane Smith\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 6,\n                        \"title\": \"Database Management\",\n                        \"publishDate\": \"2011-10-05\",\n                        \"edition\": 3,\n                        \"volume\": 1,\n                        \"press\": \"Pearson\",\n                        \"noPages\": 680,\n                        \"authors\": [\n                            {\n                                \"id\": 1,\n                                \"fullName\": \"John Doe\"\n                            },\n                            {\n                                \"id\": 3,\n                                \"fullName\": \"Michael Johnson\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 10,\n                        \"title\": \"Programming Languages\",\n                        \"publishDate\": \"2007-04-15\",\n                        \"edition\": 4,\n                        \"volume\": 1,\n                        \"press\": \"Cambridge University Press\",\n                        \"noPages\": 750,\n                        \"authors\": [\n                            {\n                                \"id\": 1,\n                                \"fullName\": \"John Doe\"\n                            },\n                            {\n                                \"id\": 9,\n                                \"fullName\": \"James Jackson\"\n                            }\n                        ]\n                    },\n                    {\n                        \"id\": 17,\n                        \"title\": \"Quantum Computing\",\n                        \"publishDate\": \"2014-04-08\",\n                        \"edition\": 2,\n                        \"volume\": 1,\n                        \"press\": \"Elsevier\",\n                        \"noPages\": 730,\n                        \"authors\": [\n                            {\n                                \"id\": 1,\n                                \"fullName\": \"John Doe\"\n                            },\n                            {\n                                \"id\": 2,\n                                \"fullName\": \"Jane Smith\"\n                            }\n                        ]\n                    }\n                ]\n            }\n        ]\n    },\n    \"isSuccess\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "createOne",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"Peter Martin\",\r\n    \"birthDate\": \"1985-09-24\",\r\n    \"bookIds\": [1, 2]\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/app/author/createOne",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"app",
+								"author",
+								"createOne"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "failure01",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"fullName\": \"Peter Martin\",\r\n    \"birthDate\": \"1985-09-24\",\r\n    \"bookIds\": [1, 2]\r\n    \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/app/author/createOne",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"app",
+										"author",
+										"createOne"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 01 Apr 2024 19:14:42 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"isSuccess\": false,\n    \"errors\": [\n        {\n            \"errorCode\": \"5003\",\n            \"message\": \"book id = 1 not found\",\n            \"errorData\": 1\n        }\n    ]\n}"
+						},
+						{
+							"name": "success01",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"fullName\": \"Dario Snyder\",\r\n    \"birthDate\": \"1985-09-24\",\r\n    \"bookIds\": []\r\n    \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/app/author/createOne",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"app",
+										"author",
+										"createOne"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 01 Apr 2024 19:16:19 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"fullName\": \"Dario Snyder\",\n        \"birthDate\": \"1985-09-24\",\n        \"bookIds\": [],\n        \"id\": 1\n    },\n    \"isSuccess\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "createMany",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"Peter Martin\",\r\n    \"birthDate\": \"1985-09-24\",\r\n    \"bookIds\": [1, 2]\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/app/author/createOne",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"app",
+								"author",
+								"createOne"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success01",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n    {\r\n        \"fullName\": \"Peter Martin\",\r\n        \"birthDate\": \"1985-09-24\",\r\n        \"bookIds\": [\r\n        ]\r\n    },\r\n    {\r\n        \"fullName\": \"John Snow\",\r\n        \"birthDate\": \"1985-09-24\",\r\n        \"bookIds\": [\r\n        ]\r\n    },\r\n    {\r\n        \"fullName\": \"Zeus Martin\",\r\n        \"birthDate\": \"1985-09-24\",\r\n        \"bookIds\": [\r\n        ]\r\n    }\r\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/app/author/createMany",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"app",
+										"author",
+										"createMany"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 01 Apr 2024 10:41:33 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"fullName\": \"Peter Martin\",\n            \"birthDate\": \"1985-09-24\",\n            \"bookIds\": [],\n            \"id\": 2\n        },\n        {\n            \"fullName\": \"John Snow\",\n            \"birthDate\": \"1985-09-24\",\n            \"bookIds\": [],\n            \"id\": 3\n        },\n        {\n            \"fullName\": \"Zeus Martin\",\n            \"birthDate\": \"1985-09-24\",\n            \"bookIds\": [],\n            \"id\": 4\n        }\n    ],\n    \"isSuccess\": true\n}"
+						},
+						{
+							"name": "success03",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n    {\r\n        \"fullName\": \"John Doe\",\r\n        \"birthDate\": \"1990-01-01\",\r\n        \"bookIds\": []\r\n    },\r\n    {\r\n        \"fullName\": \"Jane Smith\",\r\n        \"birthDate\": \"1988-05-15\",\r\n        \"bookIds\": []\r\n    },\r\n    {\r\n        \"fullName\": \"Michael Johnson\",\r\n        \"birthDate\": \"1975-11-30\",\r\n        \"bookIds\": []\r\n    },\r\n    {\r\n        \"fullName\": \"Emily Brown\",\r\n        \"birthDate\": \"1982-07-20\",\r\n        \"bookIds\": []\r\n    },\r\n    {\r\n        \"fullName\": \"William Wilson\",\r\n        \"birthDate\": \"1995-03-10\",\r\n        \"bookIds\": []\r\n    },\r\n    {\r\n        \"fullName\": \"Sophia Taylor\",\r\n        \"birthDate\": \"1989-09-05\",\r\n        \"bookIds\": []\r\n    },\r\n    {\r\n        \"fullName\": \"Matthew Anderson\",\r\n        \"birthDate\": \"1983-12-18\",\r\n        \"bookIds\": []\r\n    },\r\n    {\r\n        \"fullName\": \"Olivia Martinez\",\r\n        \"birthDate\": \"1978-04-25\",\r\n        \"bookIds\": []\r\n    },\r\n    {\r\n        \"fullName\": \"James Jackson\",\r\n        \"birthDate\": \"1992-06-28\",\r\n        \"bookIds\": []\r\n    },\r\n    {\r\n        \"fullName\": \"Ava Thompson\",\r\n        \"birthDate\": \"1980-02-14\",\r\n        \"bookIds\": []\r\n    }\r\n]\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/app/author/createMany",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"app",
+										"author",
+										"createMany"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 01 Apr 2024 20:12:35 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"fullName\": \"John Doe\",\n            \"birthDate\": \"1990-01-01\",\n            \"bookIds\": [],\n            \"id\": 1\n        },\n        {\n            \"fullName\": \"Jane Smith\",\n            \"birthDate\": \"1988-05-15\",\n            \"bookIds\": [],\n            \"id\": 2\n        },\n        {\n            \"fullName\": \"Michael Johnson\",\n            \"birthDate\": \"1975-11-30\",\n            \"bookIds\": [],\n            \"id\": 3\n        },\n        {\n            \"fullName\": \"Emily Brown\",\n            \"birthDate\": \"1982-07-20\",\n            \"bookIds\": [],\n            \"id\": 4\n        },\n        {\n            \"fullName\": \"William Wilson\",\n            \"birthDate\": \"1995-03-10\",\n            \"bookIds\": [],\n            \"id\": 5\n        },\n        {\n            \"fullName\": \"Sophia Taylor\",\n            \"birthDate\": \"1989-09-05\",\n            \"bookIds\": [],\n            \"id\": 6\n        },\n        {\n            \"fullName\": \"Matthew Anderson\",\n            \"birthDate\": \"1983-12-18\",\n            \"bookIds\": [],\n            \"id\": 7\n        },\n        {\n            \"fullName\": \"Olivia Martinez\",\n            \"birthDate\": \"1978-04-25\",\n            \"bookIds\": [],\n            \"id\": 8\n        },\n        {\n            \"fullName\": \"James Jackson\",\n            \"birthDate\": \"1992-06-28\",\n            \"bookIds\": [],\n            \"id\": 9\n        },\n        {\n            \"fullName\": \"Ava Thompson\",\n            \"birthDate\": \"1980-02-14\",\n            \"bookIds\": [],\n            \"id\": 10\n        }\n    ],\n    \"isSuccess\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "updateOne",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"fullName\": \"Peter Martin\",\r\n    \"birthDate\": \"1985-09-24\",\r\n    \"bookIds\": [4, 5]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/app/author/updateOne",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"app",
+								"author",
+								"updateOne"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "successCase01",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"fullName\": \"Peter Martin\",\r\n    \"birthDate\": \"1985-09-24\",\r\n    \"bookIds\": [4, 5]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/app/author/updateOne",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"app",
+										"author",
+										"updateOne"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 26 Mar 2024 10:28:25 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": true,\n    \"isSuccess\": true\n}"
+						},
+						{
+							"name": "failCase01",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"fullName\": \"Stephen King\",\r\n    \"birthDate\": \"1985-09-24\",\r\n    \"bookIds\": [4, 5]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/app/author/updateOne",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"app",
+										"author",
+										"updateOne"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 26 Mar 2024 10:56:01 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"isSuccess\": false,\n    \"errors\": [\n        {\n            \"errorCode\": \"5007\",\n            \"message\": \"author fullname already found.\",\n            \"errorData\": \"Stephen King\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "getOne",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/app/author/getOne/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"app",
+								"author",
+								"getOne",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "getOneSuccessCase01",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/app/author/getOne/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"app",
+										"author",
+										"getOne",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 26 Mar 2024 10:20:22 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"id\": 1,\n        \"fullName\": \"J.K. Rowling\",\n        \"birthDate\": \"1965-07-31\",\n        \"books\": [\n            {\n                \"id\": \"1\",\n                \"title\": \"Harry Potter and the Philosopher's Stone\"\n            },\n            {\n                \"id\": \"2\",\n                \"title\": \"Harry Potter and the Chamber of Secrets\"\n            }\n        ]\n    },\n    \"isSuccess\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "deleteOneById",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/app/author/deleteOne/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"app",
+								"author",
+								"deleteOne",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "successCase01",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/app/author/deleteOne/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"app",
+										"author",
+										"deleteOne",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 26 Mar 2024 10:42:27 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"fullName\": \"Peter Martin\",\n        \"birthDate\": \"1985-09-24\",\n        \"bookIds\": [\n            4,\n            5\n        ],\n        \"id\": 1\n    },\n    \"isSuccess\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "deleteMany",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/app/author/deleteMany",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"app",
+								"author",
+								"deleteMany"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "successCase",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"op\": \"<=\",\r\n    \"lhs\": \"birthDate\",\r\n    \"rhs\": \"1940-12-30\",\r\n    \"type\": \"Date\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/app/author/deleteMany",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"app",
+										"author",
+										"deleteMany"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 26 Mar 2024 10:52:18 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"fullName\": \"Margaret Atwood\",\n            \"birthDate\": \"1939-11-18\",\n            \"bookIds\": [\n                7,\n                8\n            ],\n            \"id\": 4\n        }\n    ],\n    \"isSuccess\": true\n}"
+						},
+						{
+							"name": "success-date-condition",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"op\": \"<=\",\r\n    \"lhs\": \"birthDate\",\r\n    \"rhs\": \"2010-12-30\",\r\n    \"type\": \"Date\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/app/author/deleteMany",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"app",
+										"author",
+										"deleteMany"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 01 Apr 2024 22:22:50 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"fullName\": \"Jane Smith\",\n            \"birthDate\": \"1988-05-15\",\n            \"bookIds\": [\n                1,\n                7,\n                11,\n                17\n            ],\n            \"id\": 2\n        },\n        {\n            \"fullName\": \"Michael Johnson\",\n            \"birthDate\": \"1975-11-30\",\n            \"bookIds\": [\n                2,\n                6,\n                12,\n                18\n            ],\n            \"id\": 3\n        },\n        {\n            \"fullName\": \"Emily Brown\",\n            \"birthDate\": \"1982-07-20\",\n            \"bookIds\": [\n                2,\n                7,\n                13,\n                18\n            ],\n            \"id\": 4\n        },\n        {\n            \"fullName\": \"William Wilson\",\n            \"birthDate\": \"1995-03-10\",\n            \"bookIds\": [\n                3,\n                8,\n                11,\n                14,\n                19\n            ],\n            \"id\": 5\n        },\n        {\n            \"fullName\": \"Sophia Taylor\",\n            \"birthDate\": \"1989-09-05\",\n            \"bookIds\": [\n                3,\n                12,\n                15,\n                19\n            ],\n            \"id\": 6\n        },\n        {\n            \"fullName\": \"Matthew Anderson\",\n            \"birthDate\": \"1983-12-18\",\n            \"bookIds\": [\n                4,\n                8,\n                13,\n                16,\n                20\n            ],\n            \"id\": 7\n        },\n        {\n            \"fullName\": \"Olivia Martinez\",\n            \"birthDate\": \"1978-04-25\",\n            \"bookIds\": [\n                4,\n                9,\n                14,\n                20\n            ],\n            \"id\": 8\n        },\n        {\n            \"fullName\": \"James Jackson\",\n            \"birthDate\": \"1992-06-28\",\n            \"bookIds\": [\n                5,\n                10,\n                15\n            ],\n            \"id\": 9\n        }\n    ],\n    \"isSuccess\": true\n}"
+						},
+						{
+							"name": "deleteAuthorsOfSpecificBook",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"op\": \"=\",\r\n    \"lhs\": \"books.title\",\r\n    \"rhs\": \"Artificial Intelligence\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/app/author/deleteMany",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"app",
+										"author",
+										"deleteMany"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 01 Apr 2024 22:38:50 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"fullName\": \"James Jackson\",\n            \"birthDate\": \"1992-06-28\",\n            \"bookIds\": [],\n            \"id\": 9\n        },\n        {\n            \"fullName\": \"Ava Thompson\",\n            \"birthDate\": \"1980-02-14\",\n            \"bookIds\": [],\n            \"id\": 10\n        }\n    ],\n    \"isSuccess\": true\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Book",
+			"item": [
+				{
+					"name": "getMany",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/app/book/getMany?pageNo=1&pageSize=20&sortDir=DESC",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"app",
+								"book",
+								"getMany"
+							],
+							"query": [
+								{
+									"key": "pageNo",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "20"
+								},
+								{
+									"key": "sortDir",
+									"value": "DESC"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success01",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/app/book/getMany?pageNo=1&pageSize=20&sortDir=DESC",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"app",
+										"book",
+										"getMany"
+									],
+									"query": [
+										{
+											"key": "pageNo",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "20"
+										},
+										{
+											"key": "sortDir",
+											"value": "DESC"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 01 Apr 2024 20:17:16 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"currentPage\": 1,\n        \"pageSize\": 20,\n        \"totalPages\": 1,\n        \"totalItems\": 20,\n        \"data\": [\n            {\n                \"id\": 20,\n                \"title\": \"Digital Design\",\n                \"publishDate\": \"2012-12-30\",\n                \"edition\": 2,\n                \"volume\": 1,\n                \"press\": \"Prentice Hall\",\n                \"noPages\": 690,\n                \"authors\": [\n                    {\n                        \"id\": 7,\n                        \"fullName\": \"Matthew Anderson\"\n                    },\n                    {\n                        \"id\": 8,\n                        \"fullName\": \"Olivia Martinez\"\n                    }\n                ]\n            },\n            {\n                \"id\": 19,\n                \"title\": \"Art of Programming\",\n                \"publishDate\": \"2009-03-17\",\n                \"edition\": 3,\n                \"volume\": 1,\n                \"press\": \"Addison-Wesley\",\n                \"noPages\": 760,\n                \"authors\": [\n                    {\n                        \"id\": 5,\n                        \"fullName\": \"William Wilson\"\n                    },\n                    {\n                        \"id\": 6,\n                        \"fullName\": \"Sophia Taylor\"\n                    }\n                ]\n            },\n            {\n                \"id\": 18,\n                \"title\": \"Robotics Engineering\",\n                \"publishDate\": \"2016-07-25\",\n                \"edition\": 1,\n                \"volume\": 1,\n                \"press\": \"Wiley\",\n                \"noPages\": 690,\n                \"authors\": [\n                    {\n                        \"id\": 3,\n                        \"fullName\": \"Michael Johnson\"\n                    },\n                    {\n                        \"id\": 4,\n                        \"fullName\": \"Emily Brown\"\n                    }\n                ]\n            },\n            {\n                \"id\": 17,\n                \"title\": \"Quantum Computing\",\n                \"publishDate\": \"2014-04-08\",\n                \"edition\": 2,\n                \"volume\": 1,\n                \"press\": \"Elsevier\",\n                \"noPages\": 730,\n                \"authors\": [\n                    {\n                        \"id\": 1,\n                        \"fullName\": \"John Doe\"\n                    },\n                    {\n                        \"id\": 2,\n                        \"fullName\": \"Jane Smith\"\n                    }\n                ]\n            },\n            {\n                \"id\": 16,\n                \"title\": \"Blockchain Technology\",\n                \"publishDate\": \"2019-08-20\",\n                \"edition\": 1,\n                \"volume\": 1,\n                \"press\": \"CRC Press\",\n                \"noPages\": 780,\n                \"authors\": [\n                    {\n                        \"id\": 7,\n                        \"fullName\": \"Matthew Anderson\"\n                    },\n                    {\n                        \"id\": 10,\n                        \"fullName\": \"Ava Thompson\"\n                    }\n                ]\n            },\n            {\n                \"id\": 15,\n                \"title\": \"Mobile App Development\",\n                \"publishDate\": \"2015-10-15\",\n                \"edition\": 2,\n                \"volume\": 1,\n                \"press\": \"Oxford University Press\",\n                \"noPages\": 700,\n                \"authors\": [\n                    {\n                        \"id\": 6,\n                        \"fullName\": \"Sophia Taylor\"\n                    },\n                    {\n                        \"id\": 9,\n                        \"fullName\": \"James Jackson\"\n                    }\n                ]\n            },\n            {\n                \"id\": 14,\n                \"title\": \"Big Data Analytics\",\n                \"publishDate\": \"2018-02-28\",\n                \"edition\": 1,\n                \"volume\": 1,\n                \"press\": \"Apress\",\n                \"noPages\": 750,\n                \"authors\": [\n                    {\n                        \"id\": 5,\n                        \"fullName\": \"William Wilson\"\n                    },\n                    {\n                        \"id\": 8,\n                        \"fullName\": \"Olivia Martinez\"\n                    }\n                ]\n            },\n            {\n                \"id\": 13,\n                \"title\": \"Cloud Computing\",\n                \"publishDate\": \"2013-05-12\",\n                \"edition\": 3,\n                \"volume\": 1,\n                \"press\": \"Manning\",\n                \"noPages\": 800,\n                \"authors\": [\n                    {\n                        \"id\": 4,\n                        \"fullName\": \"Emily Brown\"\n                    },\n                    {\n                        \"id\": 7,\n                        \"fullName\": \"Matthew Anderson\"\n                    }\n                ]\n            },\n            {\n                \"id\": 12,\n                \"title\": \"IoT Fundamentals\",\n                \"publishDate\": \"2017-11-05\",\n                \"edition\": 2,\n                \"volume\": 1,\n                \"press\": \"Packt\",\n                \"noPages\": 680,\n                \"authors\": [\n                    {\n                        \"id\": 3,\n                        \"fullName\": \"Michael Johnson\"\n                    },\n                    {\n                        \"id\": 6,\n                        \"fullName\": \"Sophia Taylor\"\n                    }\n                ]\n            },\n            {\n                \"id\": 11,\n                \"title\": \"Computer Graphics\",\n                \"publishDate\": \"2018-09-28\",\n                \"edition\": 1,\n                \"volume\": 1,\n                \"press\": \"Morgan Kaufmann\",\n                \"noPages\": 720,\n                \"authors\": [\n                    {\n                        \"id\": 2,\n                        \"fullName\": \"Jane Smith\"\n                    },\n                    {\n                        \"id\": 5,\n                        \"fullName\": \"William Wilson\"\n                    }\n                ]\n            },\n            {\n                \"id\": 10,\n                \"title\": \"Programming Languages\",\n                \"publishDate\": \"2007-04-15\",\n                \"edition\": 4,\n                \"volume\": 1,\n                \"press\": \"Cambridge University Press\",\n                \"noPages\": 750,\n                \"authors\": [\n                    {\n                        \"id\": 1,\n                        \"fullName\": \"John Doe\"\n                    },\n                    {\n                        \"id\": 9,\n                        \"fullName\": \"James Jackson\"\n                    }\n                ]\n            },\n            {\n                \"id\": 9,\n                \"title\": \"Cybersecurity Fundamentals\",\n                \"publishDate\": \"2016-12-10\",\n                \"edition\": 2,\n                \"volume\": 1,\n                \"press\": \"Sybex\",\n                \"noPages\": 650,\n                \"authors\": [\n                    {\n                        \"id\": 8,\n                        \"fullName\": \"Olivia Martinez\"\n                    },\n                    {\n                        \"id\": 10,\n                        \"fullName\": \"Ava Thompson\"\n                    }\n                ]\n            },\n            {\n                \"id\": 8,\n                \"title\": \"Software Engineering\",\n                \"publishDate\": \"2014-06-22\",\n                \"edition\": 1,\n                \"volume\": 1,\n                \"press\": \"Addison-Wesley\",\n                \"noPages\": 700,\n                \"authors\": [\n                    {\n                        \"id\": 5,\n                        \"fullName\": \"William Wilson\"\n                    },\n                    {\n                        \"id\": 7,\n                        \"fullName\": \"Matthew Anderson\"\n                    }\n                ]\n            },\n            {\n                \"id\": 7,\n                \"title\": \"Networking Essentials\",\n                \"publishDate\": \"2009-08-18\",\n                \"edition\": 2,\n                \"volume\": 1,\n                \"press\": \"McGraw-Hill\",\n                \"noPages\": 540,\n                \"authors\": [\n                    {\n                        \"id\": 2,\n                        \"fullName\": \"Jane Smith\"\n                    },\n                    {\n                        \"id\": 4,\n                        \"fullName\": \"Emily Brown\"\n                    }\n                ]\n            },\n            {\n                \"id\": 6,\n                \"title\": \"Database Management\",\n                \"publishDate\": \"2011-10-05\",\n                \"edition\": 3,\n                \"volume\": 1,\n                \"press\": \"Pearson\",\n                \"noPages\": 680,\n                \"authors\": [\n                    {\n                        \"id\": 1,\n                        \"fullName\": \"John Doe\"\n                    },\n                    {\n                        \"id\": 3,\n                        \"fullName\": \"Michael Johnson\"\n                    }\n                ]\n            },\n            {\n                \"id\": 5,\n                \"title\": \"Artificial Intelligence\",\n                \"publishDate\": \"2019-03-25\",\n                \"edition\": 1,\n                \"volume\": 1,\n                \"press\": \"MIT Press\",\n                \"noPages\": 800,\n                \"authors\": [\n                    {\n                        \"id\": 9,\n                        \"fullName\": \"James Jackson\"\n                    },\n                    {\n                        \"id\": 10,\n                        \"fullName\": \"Ava Thompson\"\n                    }\n                ]\n            },\n            {\n                \"id\": 4,\n                \"title\": \"Web Development\",\n                \"publishDate\": \"2012-07-10\",\n                \"edition\": 2,\n                \"volume\": 1,\n                \"press\": \"O'Reilly\",\n                \"noPages\": 600,\n                \"authors\": [\n                    {\n                        \"id\": 7,\n                        \"fullName\": \"Matthew Anderson\"\n                    },\n                    {\n                        \"id\": 8,\n                        \"fullName\": \"Olivia Martinez\"\n                    }\n                ]\n            },\n            {\n                \"id\": 3,\n                \"title\": \"Machine Learning\",\n                \"publishDate\": \"2015-11-30\",\n                \"edition\": 1,\n                \"volume\": 1,\n                \"press\": \"Springer\",\n                \"noPages\": 720,\n                \"authors\": [\n                    {\n                        \"id\": 5,\n                        \"fullName\": \"William Wilson\"\n                    },\n                    {\n                        \"id\": 6,\n                        \"fullName\": \"Sophia Taylor\"\n                    }\n                ]\n            },\n            {\n                \"id\": 2,\n                \"title\": \"Data Structures\",\n                \"publishDate\": \"2008-05-20\",\n                \"edition\": 2,\n                \"volume\": 1,\n                \"press\": \"Wiley\",\n                \"noPages\": 550,\n                \"authors\": [\n                    {\n                        \"id\": 3,\n                        \"fullName\": \"Michael Johnson\"\n                    },\n                    {\n                        \"id\": 4,\n                        \"fullName\": \"Emily Brown\"\n                    }\n                ]\n            },\n            {\n                \"id\": 1,\n                \"title\": \"Algorithms\",\n                \"publishDate\": \"2010-09-14\",\n                \"edition\": 3,\n                \"volume\": 1,\n                \"press\": \"APress\",\n                \"noPages\": 670,\n                \"authors\": [\n                    {\n                        \"id\": 1,\n                        \"fullName\": \"John Doe\"\n                    },\n                    {\n                        \"id\": 2,\n                        \"fullName\": \"Jane Smith\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"isSuccess\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "createOne",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"Peter Martin\",\r\n    \"birthDate\": \"1985-09-24\",\r\n    \"bookIds\": [1, 2]\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/app/author/createOne",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"app",
+								"author",
+								"createOne"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success02",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"The Escape From The Devil\",\r\n    \"publishDate\": \"2010-09-14\",\r\n    \"edition\": 3,\r\n    \"volume\": 1,\r\n    \"press\": \"APress\",\r\n    \"noPages\": 670,\r\n    \"authorsIds\": [\r\n        1,\r\n        2\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/app/book/createOne",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"app",
+										"book",
+										"createOne"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 01 Apr 2024 19:22:01 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"id\": 1,\n        \"title\": \"The Escape From The Devil\",\n        \"publishDate\": \"2010-09-14\",\n        \"edition\": 3,\n        \"volume\": 1,\n        \"press\": \"APress\",\n        \"noPages\": 670,\n        \"authors\": [\n            {\n                \"id\": 1,\n                \"fullName\": \"Dario Snyder\"\n            },\n            {\n                \"id\": 2,\n                \"fullName\": \"Peter Martin\"\n            }\n        ]\n    },\n    \"isSuccess\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "updateOne",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"fullName\": \"Peter Martin\",\r\n    \"birthDate\": \"1985-09-24\",\r\n    \"bookIds\": [4, 5]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/app/author/updateOne",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"app",
+								"author",
+								"updateOne"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success01",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Rise Of The Dragons\",\r\n    \"edition\": 3,\r\n    \"volume\": 2,    \r\n    \"authorsIds\": [\r\n        2\r\n    ],\r\n    \"id\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/app/book/updateOne",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"app",
+										"book",
+										"updateOne"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 01 Apr 2024 11:05:42 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": true,\n    \"isSuccess\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "createMany",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n    \"title\": \"Algorithms\",\r\n    \"publishDate\": \"2010-09-14\",\r\n    \"edition\": 3,\r\n    \"volume\": 1,\r\n    \"press\": \"APress\",\r\n    \"noPages\": 670,\r\n    \"authorsIds\": [\r\n        1,\r\n        2\r\n    ]\r\n},\r\n{\r\n    \"title\": \"The Stars\",\r\n    \"publishDate\": \"2010-09-14\",\r\n    \"edition\": 1,\r\n    \"volume\": 2,\r\n    \"press\": \"G.Margin\",\r\n    \"noPages\": 1200,\r\n    \"authorsIds\": [\r\n        3\r\n    ]\r\n}\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/app/book/createMany",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"app",
+								"book",
+								"createMany"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success01",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n    {\r\n        \"title\": \"Algorithms\",\r\n        \"publishDate\": \"2010-09-14\",\r\n        \"edition\": 3,\r\n        \"volume\": 1,\r\n        \"press\": \"APress\",\r\n        \"noPages\": 670,\r\n        \"authorsIds\": [1, 2]\r\n    },\r\n    {\r\n        \"title\": \"Data Structures\",\r\n        \"publishDate\": \"2008-05-20\",\r\n        \"edition\": 2,\r\n        \"volume\": 1,\r\n        \"press\": \"Wiley\",\r\n        \"noPages\": 550,\r\n        \"authorsIds\": [3, 4]\r\n    },\r\n    {\r\n        \"title\": \"Machine Learning\",\r\n        \"publishDate\": \"2015-11-30\",\r\n        \"edition\": 1,\r\n        \"volume\": 1,\r\n        \"press\": \"Springer\",\r\n        \"noPages\": 720,\r\n        \"authorsIds\": [5, 6]\r\n    },\r\n    {\r\n        \"title\": \"Web Development\",\r\n        \"publishDate\": \"2012-07-10\",\r\n        \"edition\": 2,\r\n        \"volume\": 1,\r\n        \"press\": \"O'Reilly\",\r\n        \"noPages\": 600,\r\n        \"authorsIds\": [7, 8]\r\n    },\r\n    {\r\n        \"title\": \"Artificial Intelligence\",\r\n        \"publishDate\": \"2019-03-25\",\r\n        \"edition\": 1,\r\n        \"volume\": 1,\r\n        \"press\": \"MIT Press\",\r\n        \"noPages\": 800,\r\n        \"authorsIds\": [9, 10]\r\n    },\r\n    {\r\n        \"title\": \"Database Management\",\r\n        \"publishDate\": \"2011-10-05\",\r\n        \"edition\": 3,\r\n        \"volume\": 1,\r\n        \"press\": \"Pearson\",\r\n        \"noPages\": 680,\r\n        \"authorsIds\": [1, 3]\r\n    },\r\n    {\r\n        \"title\": \"Networking Essentials\",\r\n        \"publishDate\": \"2009-08-18\",\r\n        \"edition\": 2,\r\n        \"volume\": 1,\r\n        \"press\": \"McGraw-Hill\",\r\n        \"noPages\": 540,\r\n        \"authorsIds\": [2, 4]\r\n    },\r\n    {\r\n        \"title\": \"Software Engineering\",\r\n        \"publishDate\": \"2014-06-22\",\r\n        \"edition\": 1,\r\n        \"volume\": 1,\r\n        \"press\": \"Addison-Wesley\",\r\n        \"noPages\": 700,\r\n        \"authorsIds\": [5, 7]\r\n    },\r\n    {\r\n        \"title\": \"Cybersecurity Fundamentals\",\r\n        \"publishDate\": \"2016-12-10\",\r\n        \"edition\": 2,\r\n        \"volume\": 1,\r\n        \"press\": \"Sybex\",\r\n        \"noPages\": 650,\r\n        \"authorsIds\": [8, 10]\r\n    },\r\n    {\r\n        \"title\": \"Programming Languages\",\r\n        \"publishDate\": \"2007-04-15\",\r\n        \"edition\": 4,\r\n        \"volume\": 1,\r\n        \"press\": \"Cambridge University Press\",\r\n        \"noPages\": 750,\r\n        \"authorsIds\": [1, 9]\r\n    },\r\n    {\r\n        \"title\": \"Computer Graphics\",\r\n        \"publishDate\": \"2018-09-28\",\r\n        \"edition\": 1,\r\n        \"volume\": 1,\r\n        \"press\": \"Morgan Kaufmann\",\r\n        \"noPages\": 720,\r\n        \"authorsIds\": [2, 5]\r\n    },\r\n    {\r\n        \"title\": \"IoT Fundamentals\",\r\n        \"publishDate\": \"2017-11-05\",\r\n        \"edition\": 2,\r\n        \"volume\": 1,\r\n        \"press\": \"Packt\",\r\n        \"noPages\": 680,\r\n        \"authorsIds\": [3, 6]\r\n    },\r\n    {\r\n        \"title\": \"Cloud Computing\",\r\n        \"publishDate\": \"2013-05-12\",\r\n        \"edition\": 3,\r\n        \"volume\": 1,\r\n        \"press\": \"Manning\",\r\n        \"noPages\": 800,\r\n        \"authorsIds\": [4, 7]\r\n    },\r\n    {\r\n        \"title\": \"Big Data Analytics\",\r\n        \"publishDate\": \"2018-02-28\",\r\n        \"edition\": 1,\r\n        \"volume\": 1,\r\n        \"press\": \"Apress\",\r\n        \"noPages\": 750,\r\n        \"authorsIds\": [5, 8]\r\n    },\r\n    {\r\n        \"title\": \"Mobile App Development\",\r\n        \"publishDate\": \"2015-10-15\",\r\n        \"edition\": 2,\r\n        \"volume\": 1,\r\n        \"press\": \"Oxford University Press\",\r\n        \"noPages\": 700,\r\n        \"authorsIds\": [6, 9]\r\n    },\r\n    {\r\n        \"title\": \"Blockchain Technology\",\r\n        \"publishDate\": \"2019-08-20\",\r\n        \"edition\": 1,\r\n        \"volume\": 1,\r\n        \"press\": \"CRC Press\",\r\n        \"noPages\": 780,\r\n        \"authorsIds\": [7, 10]\r\n    },\r\n    {\r\n        \"title\": \"Quantum Computing\",\r\n        \"publishDate\": \"2014-04-08\",\r\n        \"edition\": 2,\r\n        \"volume\": 1,\r\n        \"press\": \"Elsevier\",\r\n        \"noPages\": 730,\r\n        \"authorsIds\": [1, 2]\r\n    },\r\n    {\r\n        \"title\": \"Robotics Engineering\",\r\n        \"publishDate\": \"2016-07-25\",\r\n        \"edition\": 1,\r\n        \"volume\": 1,\r\n        \"press\": \"Wiley\",\r\n        \"noPages\": 690,\r\n        \"authorsIds\": [3, 4]\r\n    },\r\n    {\r\n        \"title\": \"Art of Programming\",\r\n        \"publishDate\": \"2009-03-17\",\r\n        \"edition\": 3,\r\n        \"volume\": 1,\r\n        \"press\": \"Addison-Wesley\",\r\n        \"noPages\": 760,\r\n        \"authorsIds\": [5, 6]\r\n    },\r\n    {\r\n        \"title\": \"Digital Design\",\r\n        \"publishDate\": \"2012-12-30\",\r\n        \"edition\": 2,\r\n        \"volume\": 1,\r\n        \"press\": \"Prentice Hall\",\r\n        \"noPages\": 690,\r\n        \"authorsIds\": [7, 8]\r\n    }\r\n]\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/app/book/createMany",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"app",
+										"book",
+										"createMany"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 01 Apr 2024 20:15:37 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"title\": \"Algorithms\",\n            \"publishDate\": \"2010-09-14\",\n            \"edition\": 3,\n            \"volume\": 1,\n            \"press\": \"APress\",\n            \"noPages\": 670,\n            \"authors\": [\n                {\n                    \"id\": 1,\n                    \"fullName\": \"John Doe\"\n                },\n                {\n                    \"id\": 2,\n                    \"fullName\": \"Jane Smith\"\n                }\n            ]\n        },\n        {\n            \"id\": 2,\n            \"title\": \"Data Structures\",\n            \"publishDate\": \"2008-05-20\",\n            \"edition\": 2,\n            \"volume\": 1,\n            \"press\": \"Wiley\",\n            \"noPages\": 550,\n            \"authors\": [\n                {\n                    \"id\": 3,\n                    \"fullName\": \"Michael Johnson\"\n                },\n                {\n                    \"id\": 4,\n                    \"fullName\": \"Emily Brown\"\n                }\n            ]\n        },\n        {\n            \"id\": 3,\n            \"title\": \"Machine Learning\",\n            \"publishDate\": \"2015-11-30\",\n            \"edition\": 1,\n            \"volume\": 1,\n            \"press\": \"Springer\",\n            \"noPages\": 720,\n            \"authors\": [\n                {\n                    \"id\": 5,\n                    \"fullName\": \"William Wilson\"\n                },\n                {\n                    \"id\": 6,\n                    \"fullName\": \"Sophia Taylor\"\n                }\n            ]\n        },\n        {\n            \"id\": 4,\n            \"title\": \"Web Development\",\n            \"publishDate\": \"2012-07-10\",\n            \"edition\": 2,\n            \"volume\": 1,\n            \"press\": \"O'Reilly\",\n            \"noPages\": 600,\n            \"authors\": [\n                {\n                    \"id\": 7,\n                    \"fullName\": \"Matthew Anderson\"\n                },\n                {\n                    \"id\": 8,\n                    \"fullName\": \"Olivia Martinez\"\n                }\n            ]\n        },\n        {\n            \"id\": 5,\n            \"title\": \"Artificial Intelligence\",\n            \"publishDate\": \"2019-03-25\",\n            \"edition\": 1,\n            \"volume\": 1,\n            \"press\": \"MIT Press\",\n            \"noPages\": 800,\n            \"authors\": [\n                {\n                    \"id\": 9,\n                    \"fullName\": \"James Jackson\"\n                },\n                {\n                    \"id\": 10,\n                    \"fullName\": \"Ava Thompson\"\n                }\n            ]\n        },\n        {\n            \"id\": 6,\n            \"title\": \"Database Management\",\n            \"publishDate\": \"2011-10-05\",\n            \"edition\": 3,\n            \"volume\": 1,\n            \"press\": \"Pearson\",\n            \"noPages\": 680,\n            \"authors\": [\n                {\n                    \"id\": 1,\n                    \"fullName\": \"John Doe\"\n                },\n                {\n                    \"id\": 3,\n                    \"fullName\": \"Michael Johnson\"\n                }\n            ]\n        },\n        {\n            \"id\": 7,\n            \"title\": \"Networking Essentials\",\n            \"publishDate\": \"2009-08-18\",\n            \"edition\": 2,\n            \"volume\": 1,\n            \"press\": \"McGraw-Hill\",\n            \"noPages\": 540,\n            \"authors\": [\n                {\n                    \"id\": 2,\n                    \"fullName\": \"Jane Smith\"\n                },\n                {\n                    \"id\": 4,\n                    \"fullName\": \"Emily Brown\"\n                }\n            ]\n        },\n        {\n            \"id\": 8,\n            \"title\": \"Software Engineering\",\n            \"publishDate\": \"2014-06-22\",\n            \"edition\": 1,\n            \"volume\": 1,\n            \"press\": \"Addison-Wesley\",\n            \"noPages\": 700,\n            \"authors\": [\n                {\n                    \"id\": 5,\n                    \"fullName\": \"William Wilson\"\n                },\n                {\n                    \"id\": 7,\n                    \"fullName\": \"Matthew Anderson\"\n                }\n            ]\n        },\n        {\n            \"id\": 9,\n            \"title\": \"Cybersecurity Fundamentals\",\n            \"publishDate\": \"2016-12-10\",\n            \"edition\": 2,\n            \"volume\": 1,\n            \"press\": \"Sybex\",\n            \"noPages\": 650,\n            \"authors\": [\n                {\n                    \"id\": 8,\n                    \"fullName\": \"Olivia Martinez\"\n                },\n                {\n                    \"id\": 10,\n                    \"fullName\": \"Ava Thompson\"\n                }\n            ]\n        },\n        {\n            \"id\": 10,\n            \"title\": \"Programming Languages\",\n            \"publishDate\": \"2007-04-15\",\n            \"edition\": 4,\n            \"volume\": 1,\n            \"press\": \"Cambridge University Press\",\n            \"noPages\": 750,\n            \"authors\": [\n                {\n                    \"id\": 1,\n                    \"fullName\": \"John Doe\"\n                },\n                {\n                    \"id\": 9,\n                    \"fullName\": \"James Jackson\"\n                }\n            ]\n        },\n        {\n            \"id\": 11,\n            \"title\": \"Computer Graphics\",\n            \"publishDate\": \"2018-09-28\",\n            \"edition\": 1,\n            \"volume\": 1,\n            \"press\": \"Morgan Kaufmann\",\n            \"noPages\": 720,\n            \"authors\": [\n                {\n                    \"id\": 2,\n                    \"fullName\": \"Jane Smith\"\n                },\n                {\n                    \"id\": 5,\n                    \"fullName\": \"William Wilson\"\n                }\n            ]\n        },\n        {\n            \"id\": 12,\n            \"title\": \"IoT Fundamentals\",\n            \"publishDate\": \"2017-11-05\",\n            \"edition\": 2,\n            \"volume\": 1,\n            \"press\": \"Packt\",\n            \"noPages\": 680,\n            \"authors\": [\n                {\n                    \"id\": 3,\n                    \"fullName\": \"Michael Johnson\"\n                },\n                {\n                    \"id\": 6,\n                    \"fullName\": \"Sophia Taylor\"\n                }\n            ]\n        },\n        {\n            \"id\": 13,\n            \"title\": \"Cloud Computing\",\n            \"publishDate\": \"2013-05-12\",\n            \"edition\": 3,\n            \"volume\": 1,\n            \"press\": \"Manning\",\n            \"noPages\": 800,\n            \"authors\": [\n                {\n                    \"id\": 4,\n                    \"fullName\": \"Emily Brown\"\n                },\n                {\n                    \"id\": 7,\n                    \"fullName\": \"Matthew Anderson\"\n                }\n            ]\n        },\n        {\n            \"id\": 14,\n            \"title\": \"Big Data Analytics\",\n            \"publishDate\": \"2018-02-28\",\n            \"edition\": 1,\n            \"volume\": 1,\n            \"press\": \"Apress\",\n            \"noPages\": 750,\n            \"authors\": [\n                {\n                    \"id\": 5,\n                    \"fullName\": \"William Wilson\"\n                },\n                {\n                    \"id\": 8,\n                    \"fullName\": \"Olivia Martinez\"\n                }\n            ]\n        },\n        {\n            \"id\": 15,\n            \"title\": \"Mobile App Development\",\n            \"publishDate\": \"2015-10-15\",\n            \"edition\": 2,\n            \"volume\": 1,\n            \"press\": \"Oxford University Press\",\n            \"noPages\": 700,\n            \"authors\": [\n                {\n                    \"id\": 6,\n                    \"fullName\": \"Sophia Taylor\"\n                },\n                {\n                    \"id\": 9,\n                    \"fullName\": \"James Jackson\"\n                }\n            ]\n        },\n        {\n            \"id\": 16,\n            \"title\": \"Blockchain Technology\",\n            \"publishDate\": \"2019-08-20\",\n            \"edition\": 1,\n            \"volume\": 1,\n            \"press\": \"CRC Press\",\n            \"noPages\": 780,\n            \"authors\": [\n                {\n                    \"id\": 7,\n                    \"fullName\": \"Matthew Anderson\"\n                },\n                {\n                    \"id\": 10,\n                    \"fullName\": \"Ava Thompson\"\n                }\n            ]\n        },\n        {\n            \"id\": 17,\n            \"title\": \"Quantum Computing\",\n            \"publishDate\": \"2014-04-08\",\n            \"edition\": 2,\n            \"volume\": 1,\n            \"press\": \"Elsevier\",\n            \"noPages\": 730,\n            \"authors\": [\n                {\n                    \"id\": 1,\n                    \"fullName\": \"John Doe\"\n                },\n                {\n                    \"id\": 2,\n                    \"fullName\": \"Jane Smith\"\n                }\n            ]\n        },\n        {\n            \"id\": 18,\n            \"title\": \"Robotics Engineering\",\n            \"publishDate\": \"2016-07-25\",\n            \"edition\": 1,\n            \"volume\": 1,\n            \"press\": \"Wiley\",\n            \"noPages\": 690,\n            \"authors\": [\n                {\n                    \"id\": 3,\n                    \"fullName\": \"Michael Johnson\"\n                },\n                {\n                    \"id\": 4,\n                    \"fullName\": \"Emily Brown\"\n                }\n            ]\n        },\n        {\n            \"id\": 19,\n            \"title\": \"Art of Programming\",\n            \"publishDate\": \"2009-03-17\",\n            \"edition\": 3,\n            \"volume\": 1,\n            \"press\": \"Addison-Wesley\",\n            \"noPages\": 760,\n            \"authors\": [\n                {\n                    \"id\": 5,\n                    \"fullName\": \"William Wilson\"\n                },\n                {\n                    \"id\": 6,\n                    \"fullName\": \"Sophia Taylor\"\n                }\n            ]\n        },\n        {\n            \"id\": 20,\n            \"title\": \"Digital Design\",\n            \"publishDate\": \"2012-12-30\",\n            \"edition\": 2,\n            \"volume\": 1,\n            \"press\": \"Prentice Hall\",\n            \"noPages\": 690,\n            \"authors\": [\n                {\n                    \"id\": 7,\n                    \"fullName\": \"Matthew Anderson\"\n                },\n                {\n                    \"id\": 8,\n                    \"fullName\": \"Olivia Martinez\"\n                }\n            ]\n        }\n    ],\n    \"isSuccess\": true\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}
