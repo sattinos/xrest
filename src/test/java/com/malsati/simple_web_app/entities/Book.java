@@ -1,21 +1,32 @@
 package com.malsati.simple_web_app.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.malsati.xrest.entities.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedBy;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Data
 @Entity
 @Table(name = "Book")
-public class Book extends BaseEntity<Long> {
+public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    protected LocalDate createdAt;
+
+    @Column(name = "created_by")
+    @CreatedBy
+    protected String createdBy;
 
     private String title;
 
@@ -29,10 +40,9 @@ public class Book extends BaseEntity<Long> {
     @Column(name = "no_pages")
     private int noPages;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id", nullable = true)
+    @ManyToMany(mappedBy = "books")
     @JsonBackReference
-    private Author author;
+    private List<Author> authors = new ArrayList<>();
 
     public Book(Long id) {
         this.id = id;

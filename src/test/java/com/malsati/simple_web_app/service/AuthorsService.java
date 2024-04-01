@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Service
 public class AuthorsService extends CrudServiceORM<
@@ -37,11 +38,11 @@ public class AuthorsService extends CrudServiceORM<
 
     @Override
     protected void onPreCreateOne(CreateOneAuthorInputDto createOneAuthorInputDto, Author entityToCreate) {
-        if(  createOneAuthorInputDto.getBookIds() != null &&
-            !createOneAuthorInputDto.getBookIds().isEmpty()) {
-            var books =  bookRepository.findAllById(createOneAuthorInputDto.getBookIds());
-            for (var book: books) {
-                book.setAuthor(entityToCreate);
+        if (createOneAuthorInputDto.getBookIds() != null &&
+                !createOneAuthorInputDto.getBookIds().isEmpty()) {
+            var books = bookRepository.findAllById(createOneAuthorInputDto.getBookIds());
+            for (var book : books) {
+                book.getAuthors().add(entityToCreate);
             }
             entityToCreate.setBooks(books);
         }
@@ -53,18 +54,18 @@ public class AuthorsService extends CrudServiceORM<
         AuthorRepository repo = (AuthorRepository) this.jpaRepository;
         if (repo.existsByFullName(createOneAuthorInputDto.getFullName())) {
             validations.add(
-                    new AppError(ErrorCode.AlreadyFound, "author full name already found.", createOneAuthorInputDto.getFullName())
+                    new AppError(ErrorCode.AlreadyFound, "author full fullName already found.", createOneAuthorInputDto.getFullName())
             );
         }
         if (createOneAuthorInputDto.getBookIds() == null) {
             validations.add(
-                    new AppError(ErrorCode.RequiredField, "required field: booksIds")
+                    new AppError(ErrorCode.RequiredField, "required field: bookIds")
             );
         }
 
-        if( createOneAuthorInputDto.getBookIds() != null ) {
-            for (var bookId: createOneAuthorInputDto.getBookIds()) {
-                if( !bookRepository.existsById(bookId) ) {
+        if (createOneAuthorInputDto.getBookIds() != null) {
+            for (var bookId : createOneAuthorInputDto.getBookIds()) {
+                if (!bookRepository.existsById(bookId)) {
                     validations.add(
                             new AppError(ErrorCode.InvalidInput, "book id = %d not found".formatted(bookId), bookId)
                     );
@@ -76,47 +77,40 @@ public class AuthorsService extends CrudServiceORM<
     }
 
     @Override
-    public Pair<ArrayList<AppError>, Author> validateUpdateOneInput(UpdateOneAuthorInputDto updateOneAuthorInputDto) {
+    public ArrayList<AppError> validateUpdateOneInput(UpdateOneAuthorInputDto updateOneAuthorInputDto, Author author) {
         ArrayList<AppError> validations = new ArrayList<>();
         AuthorRepository repo = (AuthorRepository) this.jpaRepository;
-
-        if (updateOneAuthorInputDto.getId() == null) {
-            validations.add(
-                    new AppError(ErrorCode.RequiredField, "required field: id.")
-            );
-            return new Pair<>(validations, null);
-        }
-
-        Author author = jpaRepository.findById(updateOneAuthorInputDto.getId()).get();
         if (updateOneAuthorInputDto.getFullName() != null &&
+                author.getFullName() != null &&
                 !author.getFullName().contentEquals(updateOneAuthorInputDto.getFullName()) &&
                 repo.existsByFullName(updateOneAuthorInputDto.getFullName())) {
             validations.add(
                     new AppError(ErrorCode.AlreadyFound, "author fullname already found.", updateOneAuthorInputDto.getFullName())
             );
         }
-        return new Pair<>(validations, author);
+        return validations;
     }
 
     @Override
     protected void onPreUpdateOne(UpdateOneAuthorInputDto updateOneAuthorInputDto, Author author) {
-        if( updateOneAuthorInputDto.getFullName() != null) {
+        if (updateOneAuthorInputDto.getFullName() != null) {
             author.setFullName(updateOneAuthorInputDto.getFullName());
         }
-        if(updateOneAuthorInputDto.getBirthDate() != null) {
+        if (updateOneAuthorInputDto.getBirthDate() != null) {
             author.setBirthDate(updateOneAuthorInputDto.getBirthDate());
         }
-        if( updateOneAuthorInputDto.getBookIds() != null) {
+        if (updateOneAuthorInputDto.getBookIds() != null) {
             var books = bookRepository.findAllById(updateOneAuthorInputDto.getBookIds());
-            setBooksAuthor(books, author);
-            setBooksAuthor(author.getBooks(), null);
-            author.setBooks(books);
+            if( !books.isEmpty() ) {
+                author.setBooks(books);
+            }
         }
     }
 
-    private void setBooksAuthor(Iterable<Book> books, Author author) {
-        for(var book: books) {
-            book.setAuthor(author);
+    @Override
+    protected void onPreDeleteOne(Author authorToDelete) {
+        if (authorToDelete.getBooks() != null && !authorToDelete.getBooks().isEmpty()) {
+            authorToDelete.getBooks().clear();
         }
     }
 }

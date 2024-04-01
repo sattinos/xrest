@@ -1,0 +1,26 @@
+server:
+  port: 9400
+spring:
+  datasource:
+    url: jdbc:h2:mem:xrestdb
+    username: sa
+    password: 123
+    driverClassName: org.h2.Driver
+  jpa:
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    createDatabaseIfNotExist: true
+    properties:
+      hibernate:
+        format_sql: true
+  h2:
+    console.enabled: true
+  jackson:
+    default-property-inclusion: non_null
+logging:
+  level:
+    org:
+      hibernate:
+        sql: trace
+    sql: trace

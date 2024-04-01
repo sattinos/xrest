@@ -378,3 +378,7 @@ You will find: <br/>
 <br/>
 
 ![Class Diagram](assets/classDiagram.png)
+
+### Coming Soon
+JSON schema validation
+Nested JSON Condition

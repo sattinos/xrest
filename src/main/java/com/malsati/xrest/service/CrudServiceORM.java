@@ -1,19 +1,23 @@
 package com.malsati.xrest.service;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import com.malsati.xrest.dto.errors.ErrorCode;
 import com.malsati.xrest.dto.pagination.PaginatedResponse;
+import com.malsati.xrest.entities.audit.interfaces.DeletionInfo;
+import com.malsati.xrest.entities.audit.interfaces.IdentityInfo;
 import com.malsati.xrest.infrastructure.jpql.SpecificationBuilder;
 import com.malsati.xrest.mapper.IMapper;
 import com.malsati.xrest.mapper.PaginationMapper;
 import com.malsati.xrest.utilities.text.StringExtensions;
 import com.malsati.xrest.utilities.tuples.Pair;
 
-import jakarta.persistence.Entity;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,43 +27,53 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.malsati.xrest.dto.ServiceResponse;
 import com.malsati.xrest.dto.errors.AppError;
-import com.malsati.xrest.entities.BaseEntity;
 
-public abstract class CrudServiceORM<T extends BaseEntity<TKeyType>,
+public class CrudServiceORM<T,
         TKeyType extends Serializable,
         CreateOneInputDto,
         CreateOneOutputDto,
-        UpdateOneInputDto,
+        UpdateOneInputDto extends IdentityInfo<TKeyType>,
         DeleteOneOutputDto,
         GetOneOutputDto> implements CrudService<T, TKeyType, CreateOneInputDto, CreateOneOutputDto, UpdateOneInputDto, DeleteOneOutputDto, GetOneOutputDto> {
-    private static String isNotDeletedCondition = "{ \"op\": \"=\", \"lhs\": \"isDeleted\", \"rhs\": false }";
+    private static final String isNotDeletedCondition = "{ \"op\": \"=\", \"lhs\": \"deleted\", \"rhs\": false }";
     protected JpaRepository<T, TKeyType> jpaRepository;
     protected IMapper<T, TKeyType, CreateOneInputDto, CreateOneOutputDto, UpdateOneInputDto, DeleteOneOutputDto, GetOneOutputDto> mapper;
 
     @Autowired
     protected SpecificationBuilder specificationBuilder;
 
-    public CrudServiceORM(JpaRepository jpaRepository,
+    protected boolean isSoftDelete = false;
+
+    public CrudServiceORM(JpaRepository<T, TKeyType> jpaRepository,
                           IMapper<T, TKeyType, CreateOneInputDto, CreateOneOutputDto, UpdateOneInputDto, DeleteOneOutputDto, GetOneOutputDto> mapper) {
         this.jpaRepository = jpaRepository;
         this.mapper = mapper;
+        this.isSoftDelete = calculateIsSoftDeleteSupported();
     }
 
     @Override
     public ServiceResponse<CreateOneOutputDto> createOne(CreateOneInputDto createOneInputDto) {
         var validationResult = validateCreateOneInput(createOneInputDto);
-        if (!validationResult.isEmpty()) {
+        if (validationResult != null && !validationResult.isEmpty()) {
             return new ServiceResponse<>(validationResult);
         }
         T entity = mapper.createOneInputDtoToEntity(createOneInputDto);
         onPreCreateOne(createOneInputDto, entity);
         var res = this.jpaRepository.save(entity);
         var createdOutputDto = mapper.entityToCreateOneOutputDto(res);
-        return new ServiceResponse(createdOutputDto);
+        return new ServiceResponse<CreateOneOutputDto>(createdOutputDto);
     }
 
-    protected abstract void onPreCreateOne(CreateOneInputDto createOneInputDto, T entityToCreate);
-    protected abstract void onPreUpdateOne(UpdateOneInputDto updateOneInputDto, T entityToUpdate);
+    protected void onPreCreateOne(CreateOneInputDto createOneInputDto, T entityToCreate) {}
+    protected void onPreUpdateOne(UpdateOneInputDto updateOneInputDto, T entityToUpdate) {}
+
+    protected void onPreDeleteOne(T entityToDelete) {}
+
+    private void onPreDeleteMany(List<T> entities) {
+        for (var entity: entities) {
+            onPreDeleteOne(entity);
+        }
+    }
 
     @Override
     public ServiceResponse<CreateOneOutputDto[]> createMany(Iterable<CreateOneInputDto> createManyInputDto) {
@@ -76,25 +90,48 @@ public abstract class CrudServiceORM<T extends BaseEntity<TKeyType>,
 
     private void onPreCreateMany(Iterable<CreateOneInputDto> createManyInputDto, List<T> entities) {
         int index = 0;
-        for (var createOneInputDto: createManyInputDto) {
-            var e =  entities.get(index);
+        for (var createOneInputDto : createManyInputDto) {
+            var e = entities.get(index);
             onPreCreateOne(createOneInputDto, e);
             index++;
         }
     }
 
+    /*
+     * The basic validation when updating any entity.
+     * @param updateOneInputDto : The update input Dto, should have implemented IdentityInfo<>
+     * @return (null, errorValidation) in case of any validation error
+     *         (entity, null) in case of validation success, the entity will be returned as a result as well
+     */
+    private Pair<ArrayList<AppError>, T> basicValidateUpdateOneInputDto(UpdateOneInputDto updateOneInputDto) {
+        if (updateOneInputDto.getId() == null) {
+            var error = new AppError(ErrorCode.RequiredField, "required field: id.");
+            return new Pair<>(new ArrayList<>(List.of(error)) , null);
+        }
+        T entity = jpaRepository.findById(updateOneInputDto.getId()).orElse(null);
+        if (entity == null) {
+            var error = new AppError(ErrorCode.InvalidInput, "wrong id value", updateOneInputDto.getId());
+            return new Pair<>(new ArrayList<>(List.of(error)), null);
+        }
+        return new Pair<>(null, entity);
+    }
+
+    @Transactional
     @Override
     public ServiceResponse<Boolean> updateOne(UpdateOneInputDto updateOneInputDto) {
-        var validationResult = validateUpdateOneInput(updateOneInputDto);
-        if(validationResult == null) {
-            // Need to implement validateUpdateOneInput in a subclass
-            return new ServiceResponse<>(false);
+        var basicValidationResult = basicValidateUpdateOneInputDto(updateOneInputDto);
+        if( basicValidationResult.second() == null) {
+            return new ServiceResponse<Boolean>(basicValidationResult.first());
         }
-        if (!validationResult.first().isEmpty()) {
-            return new ServiceResponse<>(validationResult.first());
+        T entity = basicValidationResult.second();
+        var validationResult = validateUpdateOneInput(updateOneInputDto, entity);
+        if (validationResult != null && !validationResult.isEmpty()) {
+            return new ServiceResponse<>(validationResult);
         }
-        var entity = validationResult.second();
+        mapper.updateOneInputDtoToEntity(updateOneInputDto, entity);
+
         onPreUpdateOne(updateOneInputDto, entity);
+
         this.jpaRepository.save(entity);
         return new ServiceResponse<>(true);
     }
@@ -103,8 +140,8 @@ public abstract class CrudServiceORM<T extends BaseEntity<TKeyType>,
     public ServiceResponse<Boolean> updateMany(Iterable<UpdateOneInputDto> updateManyInputDto) {
         var allValidations = validateUpdateManyInput(updateManyInputDto);
         var entities = new ArrayList<T>();
-        for(var validation: allValidations) {
-            if( validation.second() == null) {
+        for (var validation : allValidations) {
+            if (validation.second() == null) {
                 return new ServiceResponse<>(validation.first());
             }
             entities.add(validation.second());
@@ -116,23 +153,32 @@ public abstract class CrudServiceORM<T extends BaseEntity<TKeyType>,
 
     private void onPreUpdateMany(Iterable<UpdateOneInputDto> updateManyInputDto, List<T> entities) {
         int index = 0;
-        for (var updateOneInputDto: updateManyInputDto) {
-            var entity =  entities.get(index);
+        for (var updateOneInputDto : updateManyInputDto) {
+            var entity = entities.get(index);
             onPreUpdateOne(updateOneInputDto, entity);
             index++;
         }
     }
 
-    public abstract ArrayList<AppError> validateCreateOneInput(CreateOneInputDto createOneInputDto);
+    /*
+        Returns an empty array of AppError of validation passes
+        Otherwise, it will contain list of validation errors
+    * */
+    public ArrayList<AppError> validateCreateOneInput(CreateOneInputDto createOneInputDto) {
+        return null;
+    }
 
-    public abstract Pair<ArrayList<AppError>, T> validateUpdateOneInput(UpdateOneInputDto updateOneInputDto);
+    public ArrayList<AppError> validateUpdateOneInput(UpdateOneInputDto updateOneInputDto, T entity) {
+        return null;
+    }
 
     private ArrayList<AppError> validateCreateManyInput(Iterable<CreateOneInputDto> createManyInputDto) {
         var allValidations = new ArrayList<AppError>();
         for (var createOneInputDto : createManyInputDto) {
             var validationResult = validateCreateOneInput(createOneInputDto);
-            if (validationResult != null) {
+            if (validationResult != null && !validationResult.isEmpty()) {
                 allValidations.addAll(validationResult);
+                return allValidations;
             }
         }
         return allValidations;
@@ -141,9 +187,15 @@ public abstract class CrudServiceORM<T extends BaseEntity<TKeyType>,
     private ArrayList<Pair<ArrayList<AppError>, T>> validateUpdateManyInput(Iterable<UpdateOneInputDto> updateManyInputDto) {
         var allValidations = new ArrayList<Pair<ArrayList<AppError>, T>>();
         for (var updateOneInputDto : updateManyInputDto) {
-            var validationResult = validateUpdateOneInput(updateOneInputDto);
-            allValidations.add(validationResult);
-            if( validationResult.second() == null) {
+            var result = basicValidateUpdateOneInputDto(updateOneInputDto);
+            allValidations.add(result);
+            if( result.first() != null) {
+                return allValidations;
+            }
+
+            var validationResult = validateUpdateOneInput(updateOneInputDto, result.second());
+            if(validationResult != null && !validationResult.isEmpty()) {
+                result.first().addAll(validationResult);
                 return allValidations;
             }
         }
@@ -152,16 +204,18 @@ public abstract class CrudServiceORM<T extends BaseEntity<TKeyType>,
 
     @Override
     public ServiceResponse<GetOneOutputDto> getOne(String condition) {
-        if( condition == null || condition.isBlank() || StringExtensions.IsBlankJson(condition)) {
+        if (condition == null || condition.isBlank() || StringExtensions.IsBlankJson(condition)) {
             return new ServiceResponse<GetOneOutputDto>(new AppError(ErrorCode.InvalidInput, "bad JSON condition."));
         }
         var specificationExecutor = (JpaSpecificationExecutor<T>) jpaRepository;
         if (specificationExecutor == null) {
             return new ServiceResponse<GetOneOutputDto>(new AppError(ErrorCode.InternalSystemError, "unable to find JpaSpecificationExecutor"));
         }
-        var criteria = specificationBuilder.buildWithAnd(condition, isNotDeletedCondition);
+        var criteria = isSoftDelete ? specificationBuilder.buildWithAnd(condition, isNotDeletedCondition) :
+                                      specificationBuilder.build(condition);
+
         Optional<T> entity = specificationExecutor.findOne(criteria);
-        if( entity.isPresent() ) {
+        if (entity.isPresent()) {
             var outputDto = mapper.entityToGetOneoutputDto(entity.get());
             return new ServiceResponse<GetOneOutputDto>(outputDto);
         }
@@ -170,11 +224,11 @@ public abstract class CrudServiceORM<T extends BaseEntity<TKeyType>,
 
     @Override
     public ServiceResponse<GetOneOutputDto> getOneById(TKeyType id) {
-        if( id == null) {
+        if (id == null) {
             return new ServiceResponse<GetOneOutputDto>(new AppError(ErrorCode.RequiredField, "required field: id."));
         }
         var entity = jpaRepository.findById(id);
-        if( entity.isPresent() ) {
+        if (entity.isPresent()) {
             var outputDto = mapper.entityToGetOneoutputDto(entity.get());
             return new ServiceResponse<>(outputDto);
         }
@@ -190,13 +244,23 @@ public abstract class CrudServiceORM<T extends BaseEntity<TKeyType>,
         }
 
         Specification<T> criteria = null;
-        if( condition == null || condition.isBlank() || StringExtensions.IsBlankJson(condition)) {
-            criteria = specificationBuilder.build(isNotDeletedCondition);
+        if (condition == null || condition.isBlank() || StringExtensions.IsBlankJson(condition)) {
+            if (!isSoftDelete) {
+                onePage = jpaRepository.findAll(pageable);
+            }
+
+            if (isSoftDelete) {
+                criteria = specificationBuilder.build(isNotDeletedCondition);
+                onePage = specificationExecutor.findAll(criteria, pageable);
+            }
         }
-        if( criteria == null ) {
-            criteria = specificationBuilder.buildWithAnd(condition, isNotDeletedCondition);
+
+        if (criteria == null && onePage == null) {
+            criteria = isSoftDelete ? specificationBuilder.buildWithAnd(condition, isNotDeletedCondition) :
+                    specificationBuilder.build(condition);
+            onePage = specificationExecutor.findAll(criteria, pageable);
         }
-        onePage = specificationExecutor.findAll(criteria, pageable);
+
         PaginatedResponse<GetOneOutputDto> paginatedResponse = PaginationMapper.mapPageToPaginatedResponse(onePage, mapper::entityToGetOneoutputDto);
         return new ServiceResponse<>(paginatedResponse);
     }
@@ -205,35 +269,47 @@ public abstract class CrudServiceORM<T extends BaseEntity<TKeyType>,
     public ServiceResponse<Long> count(String condition) {
         var specificationExecutor = (JpaSpecificationExecutor<T>) jpaRepository;
         if (specificationExecutor == null) {
-            return new ServiceResponse(new AppError(ErrorCode.InternalSystemError, "unable to find JpaSpecificationExecutor"));
+            return new ServiceResponse<Long>(new AppError(ErrorCode.InternalSystemError, "unable to find JpaSpecificationExecutor"));
         }
 
         Specification<T> criteria = null;
-        if( condition == null || condition.isBlank() || StringExtensions.IsBlankJson(condition)) {
+        if (condition == null || condition.isBlank() || StringExtensions.IsBlankJson(condition)) {
+            if (!isSoftDelete) {
+                return new ServiceResponse<>(jpaRepository.count());
+            }
             criteria = specificationBuilder.build(isNotDeletedCondition);
         }
-        if( criteria == null ) {
-            criteria = specificationBuilder.buildWithAnd(condition, isNotDeletedCondition);
+        if (criteria == null) {
+            criteria = isSoftDelete ? specificationBuilder.buildWithAnd(condition, isNotDeletedCondition) :
+                    specificationBuilder.build(condition);
         }
         return new ServiceResponse<>(specificationExecutor.count(criteria));
     }
 
     @Override
+    @Transactional
     public ServiceResponse<DeleteOneOutputDto> deleteOneById(TKeyType id) {
-        if( id == null) {
+        if (id == null) {
             return new ServiceResponse<DeleteOneOutputDto>(new AppError(ErrorCode.RequiredField, "required field: id."));
         }
         var entityRef = jpaRepository.findById(id);
-        if( entityRef.isPresent() ) {
+        if (entityRef.isPresent()) {
             var entity = entityRef.get();
-            if( entity.getIsDeleted() ) {
-                return new ServiceResponse<DeleteOneOutputDto>(new AppError(ErrorCode.AlreadyDeleted, "the entity is already deleted", id));
+
+            if (isSoftDelete) {
+                var deleteEntity = (DeletionInfo) entity;
+                if (deleteEntity.getDeleted()) {
+                    return new ServiceResponse<DeleteOneOutputDto>(new AppError(ErrorCode.AlreadyDeleted, "the entity is already deleted", id));
+                }
+                onPreDeleteOne(entity);
+                deleteEntity.setDeleted(true);
+                jpaRepository.save(entity);
             }
-            entity.setIsDeleted(true);
-            jpaRepository.save(entity);
-
+            if (!isSoftDelete) {
+                onPreDeleteOne(entity);
+                jpaRepository.deleteById(id);
+            }
             var deleteOneOutputDto = mapper.entityToDeleteOneOutputDto(entity);
-
             return new ServiceResponse<>(deleteOneOutputDto);
         }
         return new ServiceResponse<DeleteOneOutputDto>(new AppError(ErrorCode.NotFound, "invalid id value", id));
@@ -241,25 +317,58 @@ public abstract class CrudServiceORM<T extends BaseEntity<TKeyType>,
 
     @Override
     public ServiceResponse<List<DeleteOneOutputDto>> deleteMany(String condition) {
-        if( condition == null || condition.isBlank() || StringExtensions.IsBlankJson(condition)) {
+        if (condition == null || condition.isBlank() || StringExtensions.IsBlankJson(condition)) {
             return new ServiceResponse<List<DeleteOneOutputDto>>(new AppError(ErrorCode.InvalidInput, "condition is required"));
         }
         var specificationExecutor = (JpaSpecificationExecutor<T>) jpaRepository;
         if (specificationExecutor == null) {
-            return new ServiceResponse(new AppError(ErrorCode.InternalSystemError, "unable to find JpaSpecificationExecutor"));
+            return new ServiceResponse<List<DeleteOneOutputDto>>(new AppError(ErrorCode.InternalSystemError, "unable to find JpaSpecificationExecutor"));
         }
-        var criteria = specificationBuilder.buildWithAnd(condition, isNotDeletedCondition);
+
+        var criteria = isSoftDelete ? specificationBuilder.buildWithAnd(condition, isNotDeletedCondition) :
+                specificationBuilder.build(condition);
 
         List<T> entities = specificationExecutor.findAll(criteria);
+        if (entities.isEmpty()) {
+            return new ServiceResponse<List<DeleteOneOutputDto>>(new AppError(ErrorCode.NotFound, "nothing was deleted."));
+        }
+        if (!isSoftDelete) {
+            onPreDeleteMany(entities);
+            jpaRepository.deleteAll(entities);
+        }
 
+        if (isSoftDelete) {
+            for (var entity : entities) {
+                var deleteEntity = (DeletionInfo) entity;
+                if (deleteEntity.getDeleted()) {
+                    return new ServiceResponse<List<DeleteOneOutputDto>>(
+                            new AppError(ErrorCode.AlreadyDeleted, String.format("the entity is already deleted: %s", entity))
+                    );
+                }
+                onPreDeleteOne(entity);
+                deleteEntity.setDeleted(true);
+                deleteEntity.setDeletedAt(LocalDate.now());
+                // TODO: find a way to set deletedBy
+            }
+            jpaRepository.saveAll(entities);
+        }
         var deleteManyOutputDto = mapper.entitiesToDeleteManyOutputDto(entities);
-        for (var entity: entities) {
-            entity.setIsDeleted(true);
-        }
-        jpaRepository.saveAll(entities);
-        if( entities.size() == 0 ) {
-            return new ServiceResponse(new AppError(ErrorCode.NotFound, "nothing was deleted."));
-        }
         return new ServiceResponse<>(deleteManyOutputDto);
+    }
+
+    private Class<?> getEntityType() {
+        ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
+        return (Class<?>) parameterizedType.getActualTypeArguments()[0];
+    }
+
+    /*
+        Warning: This function is Reflection based, it should be called only once at the constructor phase
+                 In order to Guarantee That, make sure the Service class that subclass from this class
+                 is annotated with @Service
+                 It will scope this service as Singleton.
+    */
+    private boolean calculateIsSoftDeleteSupported() {
+        Class<?> entityClass = getEntityType();
+        return DeletionInfo.class.isAssignableFrom(entityClass);
     }
 }
