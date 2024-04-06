@@ -35,4 +35,11 @@
     [add] Handling nested conditions (conditions on related entities)
     [add] Additional Tests for ( Hard Delete, Soft Delete, Conditional Delete )
 
+1.0.8
+=====
+    [add] Postman Collection for the API tests (Author and Books)
 
+1.0.12
+======
+    [modify] Change the package name to be under org
+    [add] XRest 1.0.12 documentation

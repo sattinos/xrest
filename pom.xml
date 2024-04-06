@@ -8,10 +8,10 @@
         <version>3.2.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.malsati</groupId>
+    <groupId>org.malsati</groupId>
     <artifactId>xrest</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.12</version>
     <name>xrest</name>
     <url>http://maven.apache.org</url>
     <description>A REST accelerator library. It allows for creating CRUD Controller and express conditions in JSON notation</description>
