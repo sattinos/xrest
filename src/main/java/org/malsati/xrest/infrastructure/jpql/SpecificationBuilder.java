@@ -15,6 +15,143 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.HashMap;
 
+/**
+ * This is the core class for handling JSON where condition.
+ * It parses the JSON condition recursively and generated a list of specification to be executed later by JPAExecutor
+ * @param <T> This the entity type
+ * <br>
+ * <br>
+ *
+ * <H2>How to Form JSON Conditions</H2> <br>
+ *
+ * LHS/RHS format:
+ * <pre>{@code
+ * {
+ *     "op": ...,
+ *     "lhs": ...,
+ *     "rhs": ...
+ * }
+ * }
+ * </pre>
+ * This is used with Binary operators, where: <br>
+ * op: operator type( &lt;, =, &lt;=, &gt;, &gt;=, !=, like )<br>
+ * lhs: left hand side, should be the entity field name.<br>
+ * rhs: right hand side, should be the value<br>
+ *
+ * Example1: all entities which have a title similar to the form: %Harry Potter%
+ * <pre>{@code
+ * {
+ *     "op": "like",
+ *     "lhs": "title",
+ *     "rhs": "%Harry Potter%"
+ * }
+ * }
+ * </pre>
+ *
+ * Example2: all entities which have an age higher than 18
+ * <pre>{@code
+ * {
+ *     "op": ">",
+ *     "lhs": "age",
+ *     "rhs": 18
+ * }
+ * }
+ * </pre>
+ *
+ * If the type of the rhs is not scalar, you need to provide a hint what it is through the "type" key.
+ * For example:
+ *
+ * Example3: all entities whose publishDate is after 2009-01-01
+ * <pre>{@code
+ * {
+ *     "op": ">",
+ *     "lhs": "publishDate",
+ *     "rhs": "2009-01-01",
+ *     "type": "Date"
+ * }
+ * }
+ * </pre>
+ *
+ * RANGE format:
+ * This is used with Ternary operators, where:
+ * op: operator type ( between )
+ * lhs: left hand side, should be the entity field name.
+ * range1: the start of the range
+ * range2: the end of the range
+ *
+ * Example4: all entities whose deathDate is in the range inclusive [1999-06-01 , 2003-12-01]
+ * <pre>{@code
+ * {
+ *     "op": "between",
+ *     "lhs": "deathDate",
+ *     "range1": "1999-06-01",
+ *     "range2": "2003-12-01",
+ *     "type": "Date"
+ * }
+ * }
+ * </pre>
+ *
+ * Example5: all entities whose age is in the range inclusive [18, 28]
+ * <pre>{@code
+ * {
+ *     "op": "between",
+ *     "lhs": "age",
+ *     "range1": 18,
+ *     "range2": 28
+ * }
+ * }
+ * </pre>
+ *
+ * Example6:
+ * <pre>{@code
+ * {
+ *     "op": "&&",
+ *     "lhs": {
+ *         "op": "between",
+ *         "lhs": "publishDate",
+ *         "range1": "1999-06-01",
+ *         "range2": "2003-12-01",
+ *         "type": "Date"
+ *     },
+ *     "rhs": {
+ *         "op": "||",
+ *         "lhs": {
+ *             "op": "like",
+ *             "lhs": "name",
+ *             "rhs": "% of %"
+ *         },
+ *         "rhs": {
+ *             "op": ">",
+ *             "lhs": "noPages",
+ *             "rhs": 800
+ *         }
+ *     }
+ * }
+ * }
+ * </pre>
+ * Example 6 explanation: all entities that: <br>
+ *     has been published in the range inclusive [1999-06-01 , 2003-12-01]<br>
+ *     and<br>
+ *         either<br>
+ *             its name is similar to the token " of "<br>
+ *         or its number of pages is more than 800<br>
+ *<br><br><br>
+ *
+ * Example7:
+ * <pre>{@code
+ * {
+ *     "op": "=",
+ *     "lhs": "books.title",
+ *     "rhs": "Artificial Intelligence"
+ *     }
+ * }
+ * </pre>
+ * Example 7 explanation: All the authors who authored the book of title: 'Artificial Intelligence' <br>
+ * Notice that the Author has a relation Many To Many to Book entity<br>
+ * and there is a list inside the Author called books<br>
+ * This will allow you to query for nested entities inside the root entity<br>
+ * The nesting level is infinite as long as there is a relation.<br>
+ */
 @Component
 public class SpecificationBuilder<T> {
     public SpecificationBuilder() {

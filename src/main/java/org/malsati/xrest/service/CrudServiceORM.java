@@ -28,6 +28,25 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.malsati.xrest.dto.ServiceResponse;
 import org.malsati.xrest.dto.errors.AppError;
 
+/**
+ * This is an implementation of a CRUDService for SQL based engines (Sql Server, PSql, MySql etc...) <br>
+ * You need to subclass this class in your project and implement the hooks if needed (onPreCreateOne, onPreUpdateOne, onPreDeleteOne)<br>
+ * If you have custom business validation rules, you need to override: (validateCreateOneInput, validateUpdateOneInput)<br>
+ *
+ * <H2>Hard Delete vs Soft Delete:</H2>
+ * At the construction phase, it will detect the type of deletion desired. The entity is supposed to implement {@link DeletionInfo} interface
+ * if soft delete is desired.
+ *
+ * @param <T> the entity to have CRUD functionality for
+ * @param <TKeyType> the type of the entity key.
+ * @param <CreateOneInputDto> The input dto for the CreateOne API
+ * @param <CreateOneOutputDto> The output dto for the CreateOne API
+ * @param <UpdateOneInputDto> The input dto for the UpdateOne API. This DTO should implement {@link IdentityInfo} interface.
+ * @param <DeleteOneOutputDto> The output dto for the DeleteOne API
+ * @param <GetOneOutputDto> The input dto for the GetOne API
+ *
+ * @see CrudService
+ */
 public class CrudServiceORM<T,
         TKeyType extends Serializable,
         CreateOneInputDto,
@@ -160,10 +179,14 @@ public class CrudServiceORM<T,
         }
     }
 
-    /*
-        Returns an empty array of AppError of validation passes
-        Otherwise, it will contain list of validation errors
-    * */
+    /**
+     *
+     * @param createOneInputDto the dto you want to validate
+     * @return an empty array of AppError of validation passes. Otherwise, it will contain list of validation errors
+     *
+     * @see AppError
+     *
+     */
     public ArrayList<AppError> validateCreateOneInput(CreateOneInputDto createOneInputDto) {
         return null;
     }
@@ -362,11 +385,18 @@ public class CrudServiceORM<T,
     }
 
     /*
-        Warning: This function is Reflection based, it should be called only once at the constructor phase
-                 In order to Guarantee That, make sure the Service class that subclass from this class
-                 is annotated with @Service
-                 It will scope this service as Singleton.
+
     */
+
+    /**
+     *
+     * Warning: This function is Reflection based, it should be called only once at the constructor phase
+     *                  In order to Guarantee That, make sure the Service class that subclass from this class
+     *                  is annotated with @Service
+     *                  It will scope this service as Singleton.
+     *
+     * @return
+     */
     private boolean calculateIsSoftDeleteSupported() {
         Class<?> entityClass = getEntityType();
         return DeletionInfo.class.isAssignableFrom(entityClass);

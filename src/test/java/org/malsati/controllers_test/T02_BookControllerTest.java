@@ -281,6 +281,8 @@ public class T02_BookControllerTest {
         var res = jsonRestHitter.getRequest(url, condition, typeRef);
         ServiceResponse<PaginatedResponse<GetOneBookOutputDto>> hitResult = res.first();
 
+        LogHelper.printMvcResult("GetManyTest with condition", res.second());
+
         System.out.println("-----------");
         System.out.println("Get Many Result:");
         System.out.println("-----------");

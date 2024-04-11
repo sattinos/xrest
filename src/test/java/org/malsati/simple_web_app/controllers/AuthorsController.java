@@ -7,8 +7,10 @@ import org.malsati.xrest.controller.CrudController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.malsati.simple_web_app.dto.author.*;
-
+/**
+ * A CRUD controller for the Author entity.
+ * This is en example of how to create CRUD controller using XRest
+ */
 @RequestMapping("/app/author")
 @RestController
 public class AuthorsController extends CrudController<Author,
