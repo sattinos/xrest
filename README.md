@@ -10,7 +10,7 @@ A truly CRUD Controller, should offer:<br/>
     4. isolate system entities from the application layer by using DTOs (input/output) for the API.
 
 By using XRest, you will offer your project two benefits:
-1. a fast way to make CRUD controller for entities. [read more](#how-to-use-this-library)
+1. a fast way to make CRUD controller for entities. [read more](#useLibrary)
    - **/getOne**  ( condition can be passed ) <br/>
    - **/getMany** ( condition can be passed ) <br/>
    - **/count**  ( condition can be passed )<br/>
@@ -40,7 +40,7 @@ In your Spring Boot project, add the following to the POM file:
 </dependency>
 ```
 
-### How to use this library ?
+## <a id='useLibrary'>How to use this library ?</a>
 1) Design your entity
 2) Design CRUD endpoints DTOs
 3) Write down your entity mapper interface
