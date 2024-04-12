@@ -49,3 +49,7 @@
     [modify] publishing info to Maven
     [modify] updated project documentation
     [add] JavaDocs support
+
+1.0.14
+======
+    [modify] update readme

@@ -7,6 +7,20 @@ A truly CRUD Controller, should offer:<br/>
     1. a generic based version that does the heavy workload.<br/>
     2. a fully customizable solution based on business requirements.<br/>
     3. a robust expressive way of WHERE conditions.<br/>
+    4. isolate system entities from the application layer by using DTOs (input/output) for the API.
+
+By using XRest, you will offer your project two benefits:
+1. a fast way to make CRUD controller for entities. [read more](#how-to-use-this-library)
+   - **/getOne**  ( condition can be passed ) <br/>
+   - **/getMany** ( condition can be passed ) <br/>
+   - **/count**  ( condition can be passed )<br/>
+   - **/createOne** <br/>
+   - **/createMany** <br/>
+   - **/updateOne** <br/>
+   - **/updateMany** <br/>
+   - **/deleteOne** <br/>
+   - **/deleteMany** ( condition should be passed ) <br/>
+2. support CRUD API set with JSON where condition. [read more](#expressing-where-condition)
 
 # Prerequisites
 1. Java 17 or higher ([Lebrica JDK](https://bell-sw.com/pages/downloads/#jdk-17-lts) is recommended here)
@@ -16,179 +30,25 @@ A truly CRUD Controller, should offer:<br/>
 # Supported Database
 Principally, XRest is supposed to work on any Sql-based database (PgSql, MySql or Microsoft Sql Server). 
 
-# How to build
-```bash
-mvn clean package
+# How to start
+In your Spring Boot project, add the following to the POM file:
+```xml
+<dependency>
+    <groupId>io.github.sattinos</groupId>
+    <artifactId>xrest</artifactId>
+    <version>1.0.13</version>
+</dependency>
 ```
-
-
-# How to test 
-```bash
-mvn test
-```
-
-while testing the project, I recommend you test using the test runner of IntelliJ Idea Community Edition.
-Each test case will output explanatory messages. 
-
-### About testing project:
-It is a Spring Boot web app, that starts the journey with you:
-1. How to Design an entity in both ways (utilize XRest Base classes, and freely design your entity).
-2. Shows how to design DTO classes.
-3. Shows how to write mapper.
-4. Shows how to write your repository classes.
-5. Shows how to write your custom service classes and write custom business validation rules as well as create/update/delete hooks.
-6. Shows you the power of `JSON Condition` and how to pass it to the API.
-7. Shows how to write your controller classes.
-8. Shows how to form `JSON Condition` in case of relation (ONE-TO-ONE, ONE-TO-MANY, MANY-TO-MANY). 
-
-The test project test cases:
-1. AuthorControllerTest it has 16 test cases. It shows how to utilize XRest base entities.
-2. BookControllerTest it has 13 test cases. It show how your freely designed entities fit into XRest.
-3. AuthorAndBookControllerTest it has 3 test cases mainly for how to deal with relation.
-
-If you have further test cases that needs to be addressed, just drop me an email or open an issue.
-
-[The test project source code](src/test/java/org/malsati/controllers_test/ContollersTestsSuite.java)
-
-
-## Expressing Where Condition
-The Where condition is in JSON notation. It allows you to express a business filter in JSON format.
-Whether you need this condition in the API, Service Layer or Infrastructure Layer.
-
-The Structure:
-    It can have one of these two forms:
-
-    1. LHS/RHS format:
-    {
-        "op": ...,
-        "lhs": ...,
-        "rhs": ...        
-    }
-
-    This is used with Binary operators, where:
-    op: operator type ( <, =, <=, >, >=, !=, like )
-    lhs: left hand side, should be the entity field name.
-    rhs: right hand side, should be the value
-
-    example1:
-    {
-        "op": "like",
-        "lhs": "title",
-        "rhs": "%Harry Potter%"
-    }
-    => all entities which have a title similar to the form: %Harry Potter%
-
-    example2:
-    {
-        "op": ">",
-        "lhs": "age",
-        "rhs": 18
-    }
-    => all entities which have an age higher than 18
-
-    If the type of the rhs is not scalar, you need to provide a hint what is it through the "type" key.
-    for example:
-
-    example3:
-    {
-        "op": ">",
-        "lhs": "publishDate",
-        "rhs": "2009-01-01",
-        "type": "Date"
-    }
-    => all entities whose publishDate is after 2009-01-01
-
-    2. RANGE format:
-    This is used with Ternary operators, where:
-    op: operator type ( between )
-    lhs: left hand side, should be the entity field name.
-    range1: the start of the range
-    range2: the end of the range
-    
-    example4:
-    {
-        "op": "between",
-        "lhs": "deathDate",
-        "range1": "1999-06-01",
-        "range2": "2003-12-01",
-        "type": "Date"
-    }
-    => all entities whose deathDate is in the range inclusive [1999-06-01 , 2003-12-01]
-
-    example5:
-    {
-        "op": "between",
-        "lhs": "age",
-        "range1": 18,
-        "range2": 28
-    }
-    => all entities whose age is in the range inclusive [18, 28]
-
-    example6:
-    {
-        "op": "&&",
-        "lhs": {
-            "op": "between",
-            "lhs": "publishDate",
-            "range1": "1999-06-01",
-            "range2": "2003-12-01",
-            "type": "Date"
-        },
-        "rhs": {
-            "op": "||",
-            "lhs": {
-                "op": "like",
-                "lhs": "name",
-                "rhs": "% of %"
-            },
-            "rhs": {
-                "op": ">",
-                "lhs": "noPages",
-                "rhs": 800
-            }
-        }
-    }
-    => all entities that:
-            has been published in the range inclusive [1999-06-01 , 2003-12-01]
-            and 
-                either 
-                       its name is similar to the token " of " 
-                    or its number of pages is more than 800
-
-    example7
-    {
-        "op": "=",
-        "lhs": "books.title",
-        "rhs": "Artificial Intelligence"
-    }
-    
-    => All the authors who authored the book of title: 'Artificial Intelligence'
-    Notice that the Author has a relation Many To Many to Book entity 
-    and there is a list inside the Author called books
-    This will allow you to query for nested entities inside the root entity
-    The nesting level is infinite as long as there is a relation.
-
-
-### The CRUD Endpoints
-The following CRUD endpoints are supported:<br/>
-    1. /getOne  ( condition can be passed ) <br/>
-    2. /getMany ( condition can be passed ) <br/>
-    3. /count  ( condition can be passed )<br/>
-    4. /createOne <br/>
-    5. /createMany <br/>
-    6. /updateOne <br/>
-    7. /updateMany <br/>
-    8. /deleteOne <br/>
-    9. /deleteMany ( condition should be passed ) <br/>
 
 ### How to use this library ?
-1) Design your entity 
+1) Design your entity
 2) Design CRUD endpoints DTOs
 3) Write down your entity mapper interface
 4) Design your repository
 5) Write down you service class
 6) Write your CRUD Controller
 7) In your project, there must be a configuration file that tells the app to scan the package: `org.malsati.xrest`
+
 
 ## 1) Design your entity
 When designing your entity, you have two options:
@@ -199,14 +59,14 @@ When designing your entity, you have two options:
 ### <a id="dexrest"></a> Interfaces and base entities offered by XRest:
 When coming to business requirements, `Audit Info` are of three types:
 1. Creation info:
-   - who created the entity
-   - when it has been created
+    - who created the entity
+    - when it has been created
 2. Update info:
-   - who updated the entity
-   - when it has been updated
+    - who updated the entity
+    - when it has been updated
 3. Delete info: (soft delete only)
-   - who deleted the entity
-   - when it has been deleted
+    - who deleted the entity
+    - when it has been deleted
 
 `XRest` offers a list of base classes to cover this:<br/><br/>
 <blockquote style="background-color:rgb(252, 252, 252); ">
@@ -321,7 +181,7 @@ public class Contract extends FullAuditEntity {
 ### <a id="defreely"></a> Freely design your own entitities:
 You can also design your own entity without any constraints.
 
-for example: 
+for example:
 
 ```java
 @NoArgsConstructor
@@ -474,7 +334,7 @@ public interface AuthorMapper extends IMapper<Author,
 [Show me how (second case)](src/test/java/org/malsati/simple_web_app/mapper/BookMapper.java)
 
 ## 4) Design your repository
-Make sure you inherit from `JpaRepository` as well as `JpaSpecificationExecutor` : 
+Make sure you inherit from `JpaRepository` as well as `JpaSpecificationExecutor` :
 ```java
 public interface AuthorRepository extends JpaRepository<Author, Long>, JpaSpecificationExecutor<Author> {
     boolean existsByFullName(String name);
@@ -483,7 +343,7 @@ public interface AuthorRepository extends JpaRepository<Author, Long>, JpaSpecif
 
 ## 5) Write down your service class:
 1. It should extend CrudServiceORM
-2. In its constructor, it should inject the entity 
+2. In its constructor, it should inject the entity
    repository and the mapper you've created in previous steps.
 3. Implement the validation methods `validateCreateOneInput` and `validateUpdateOneInput` if needed (optional)
 4. Implement the hooks `onPreCreateOne`, `onPreUpdateOne` and `onPreDeleteOne` if needed (optional)
@@ -563,6 +423,152 @@ make sure you add this configuration to tell Spring to scan for XRest components
 public class ApplicationConfig {
 }
 ```
+
+# How to test 
+```bash
+mvn test
+```
+
+while testing the project, I recommend you test using the test runner of IntelliJ Idea Community Edition.
+Each test case will output explanatory messages. Run the tests from the Test Suite [ContollersTestsSuite](src/test/java/org/malsati/controllers_test/ContollersTestsSuite.java) 
+
+### About testing project:
+It is a Spring Boot web app, that starts the journey with you:
+1. How to Design an entity in both ways (utilize XRest Base classes, and freely design your entity).
+2. Shows how to design DTO classes.
+3. Shows how to write mapper.
+4. Shows how to write your repository classes.
+5. Shows how to write your custom service classes and write custom business validation rules as well as create/update/delete hooks.
+6. Shows you the power of `JSON Condition` and how to pass it to the API.
+7. Shows how to write your controller classes.
+8. Shows how to form `JSON Condition` in case of relation (ONE-TO-ONE, ONE-TO-MANY, MANY-TO-MANY). 
+
+The test project test cases:
+1. AuthorControllerTest it has 16 test cases. It shows how to utilize XRest base entities.
+2. BookControllerTest it has 13 test cases. It show how your freely designed entities fit into XRest.
+3. AuthorAndBookControllerTest it has 3 test cases mainly for how to deal with relation.
+
+If you have further test cases that needs to be addressed, just drop me an email or open an issue.
+
+[The test project source code](src/test/java/org/malsati/controllers_test/ContollersTestsSuite.java)
+
+
+## Expressing Where Condition
+The Where condition is in JSON notation. It allows you to express a business filter in JSON format.
+Whether you need this condition in the API, Service Layer or Infrastructure Layer.
+
+The Structure:
+    It can have one of these two forms:
+
+    1. LHS/RHS format:
+    {
+        "op": ...,
+        "lhs": ...,
+        "rhs": ...        
+    }
+
+    This is used with Binary operators, where:
+    op: operator type ( <, =, <=, >, >=, !=, like )
+    lhs: left hand side, should be the entity field name.
+    rhs: right hand side, should be the value
+
+    example1:
+    {
+        "op": "like",
+        "lhs": "title",
+        "rhs": "%Harry Potter%"
+    }
+    => all entities which have a title similar to the form: %Harry Potter%
+
+    example2:
+    {
+        "op": ">",
+        "lhs": "age",
+        "rhs": 18
+    }
+    => all entities which have an age higher than 18
+
+    If the type of the rhs is not scalar, you need to provide a hint what is it through the "type" key.
+    for example:
+
+    example3:
+    {
+        "op": ">",
+        "lhs": "publishDate",
+        "rhs": "2009-01-01",
+        "type": "Date"
+    }
+    => all entities whose publishDate is after 2009-01-01
+
+    2. RANGE format:
+    This is used with Ternary operators, where:
+    op: operator type ( between )
+    lhs: left hand side, should be the entity field name.
+    range1: the start of the range
+    range2: the end of the range
+    
+    example4:
+    {
+        "op": "between",
+        "lhs": "deathDate",
+        "range1": "1999-06-01",
+        "range2": "2003-12-01",
+        "type": "Date"
+    }
+    => all entities whose deathDate is in the range inclusive [1999-06-01 , 2003-12-01]
+
+    example5:
+    {
+        "op": "between",
+        "lhs": "age",
+        "range1": 18,
+        "range2": 28
+    }
+    => all entities whose age is in the range inclusive [18, 28]
+
+    example6:
+    {
+        "op": "&&",
+        "lhs": {
+            "op": "between",
+            "lhs": "publishDate",
+            "range1": "1999-06-01",
+            "range2": "2003-12-01",
+            "type": "Date"
+        },
+        "rhs": {
+            "op": "||",
+            "lhs": {
+                "op": "like",
+                "lhs": "name",
+                "rhs": "% of %"
+            },
+            "rhs": {
+                "op": ">",
+                "lhs": "noPages",
+                "rhs": 800
+            }
+        }
+    }
+    => all entities that:
+            has been published in the range inclusive [1999-06-01 , 2003-12-01]
+            and 
+                either 
+                       its name is similar to the token " of " 
+                    or its number of pages is more than 800
+
+    example7
+    {
+        "op": "=",
+        "lhs": "books.title",
+        "rhs": "Artificial Intelligence"
+    }
+    
+    => All the authors who authored the book of title: 'Artificial Intelligence'
+    Notice that the Author has a relation Many To Many to Book entity 
+    and there is a list inside the Author called books
+    This will allow you to query for nested entities inside the root entity
+    The nesting level is infinite as long as there is a relation.
 
 
 ![Class Diagram](assets/classDiagram.png)
