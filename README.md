@@ -31,13 +31,22 @@ By using XRest, you will offer your project two benefits:
 Principally, XRest is supposed to work on any Sql-based database (PgSql, MySql or Microsoft Sql Server). 
 
 # How to start
-In your Spring Boot project, add the following to the POM file:
+1. In your Spring Boot project, add the following to the POM file:
 ```xml
 <dependency>
     <groupId>io.github.sattinos</groupId>
     <artifactId>xrest</artifactId>
     <version>1.0.13</version>
 </dependency>
+```
+
+2. make sure you add this configuration to tell Spring to scan for XRest components:
+
+```java
+@Configuration
+@ComponentScan(basePackages = "org.malsati.xrest")
+public class ApplicationConfig {
+}
 ```
 
 ## <a id='useLibrary'>How to use this library ?</a>
@@ -411,16 +420,6 @@ public class AuthorsController extends CrudController<Author,
     public AuthorsController(AuthorsService authorsService) {
         super(authorsService);
     }
-}
-```
-
-## 7) Mandatory Configuration in your web project:
-make sure you add this configuration to tell Spring to scan for XRest components:
-
-```java
-@Configuration
-@ComponentScan(basePackages = "org.malsati.xrest")
-public class ApplicationConfig {
 }
 ```
 
