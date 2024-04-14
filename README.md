@@ -281,7 +281,7 @@ public class DeleteOneAuthorOutputDto extends UpdateOneAuthorInputDto {
 It should inherit from IMapper
 
 ```java
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface AuthorMapper extends IMapper<Author,
         Long,
         CreateOneAuthorInputDto,
