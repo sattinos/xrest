@@ -22,13 +22,17 @@ By using XRest, you will offer your project two benefits:
    - **/deleteMany** ( condition should be passed ) <br/>
 2. support CRUD API set with JSON where condition. [read more](#expressing-where-condition)
 
+### productivity note:
+You can utilize ([xrest cli](https://github.com/sattinos/xrest.cli)) to scaffold your necessary code. 
+
+
 # Prerequisites
 1. Java 17 or higher ([Lebrica JDK](https://bell-sw.com/pages/downloads/#jdk-17-lts) is recommended here)
 2. [Maven](https://maven.apache.org/download.cgi) 3.9.2 or higher
 3. [Spring Boot](https://spring.io/projects/spring-boot) 
 
 # Supported Database
-Principally, XRest is supposed to work on any Sql-based database (PgSql, MySql or Microsoft Sql Server). 
+Principally, XRest is supposed to work on any Sql-based database (PostgreSQL, MySql or Microsoft Sql Server). 
 
 # How to start
 1. In your Spring Boot project, add the following to the POM file:
@@ -49,23 +53,48 @@ public class ApplicationConfig {
 }
 ```
 
-## <a id='useLibrary'>How to use this library ?</a>
-1) Design your entity
-2) Design CRUD endpoints DTOs
-3) Write down your entity mapper interface
-4) Design your repository
-5) Write down you service class
-6) Write your CRUD Controller
-7) In your project, there must be a configuration file that tells the app to scan the package: `org.malsati.xrest`
+## <a id="howtouse"></a> How to use this library ? 
+1) Design your entity [read more](#step01)
+2) Design CRUD endpoints DTOs [read more](#step02)
+3) Write down your entity mapper interface [read more](#step03)
+4) Design your repository [read more](#step04)
+5) Write down you service class [read more](#step05)
+6) Write your CRUD Controller [read more](#step06)
 
 
-## 1) Design your entity
+## <a id="step01"></a> 1) Design your entity  
 When designing your entity, you have two options:
 
-1. Make use of the list of interfaces and base entities offered by XRest. [read more](#dexrest)
-2. Design your entity freely without any utilization of XRest base classes or interfaces. [read more](#defreely)
+1. Design your entity freely without any utilization of XRest base classes or interfaces. [read more](#defreely)
+2. Make use of the list of interfaces and base entities offered by XRest. [read more](#dexrest)
 
-### <a id="dexrest"></a> Interfaces and base entities offered by XRest:
+### <a id="defreely"></a> Option1: Freely design your own entitities:
+You can design your own entity without any constraints.
+
+for example:
+
+```java
+@NoArgsConstructor
+@Data
+@Entity
+@Table(name = "Author")
+public class Author {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
+
+    @Column(name = "full_name", unique = true)
+    private String fullName;
+
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
+}
+```
+Notice that here no XRest base entities is used.
+
+[back to main steps](#howtouse)
+
+### <a id="dexrest"></a> Option2: Interfaces and base entities offered by XRest:
 When coming to business requirements, `Audit Info` are of three types:
 1. Creation info:
     - who created the entity
@@ -187,29 +216,8 @@ public class Contract extends FullAuditEntity {
 </details>
 </blockquote>
 
-### <a id="defreely"></a> Freely design your own entitities:
-You can also design your own entity without any constraints.
+[back to main steps](#howtouse)
 
-for example:
-
-```java
-@NoArgsConstructor
-@Data
-@Entity
-@Table(name = "Author")
-public class Author {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
-
-    @Column(name = "full_name", unique = true)
-    private String fullName;
-
-    @Column(name = "birth_date")
-    private LocalDate birthDate;
-}
-```
-Notice that here no XRest base entities is used.
 
 Note: There are a list of Audit interfaces that are considered the contracts of auditing. They might be useful in some situations:
 `CreationInfo`
@@ -224,7 +232,7 @@ CRUD operations will support `Soft Delete` automatically when you implement this
 
 If your entity doesn't implement this interface, `Hard Delete` will be chosen by XRest.
 
-## 2) Design CRUD endpoints DTOs
+## <a id="step02"></a> 2) Design CRUD endpoints DTOs 
 
 #### CreateOne Endpoint (CreateOneInputDto, CreateOneOutputDto)
 
@@ -277,7 +285,7 @@ public class DeleteOneAuthorOutputDto extends UpdateOneAuthorInputDto {
 }
 ```
 
-## 3) Write down your entity mapper interface
+## <a id="step03"></a> 3) Write down your entity mapper interface
 It should inherit from IMapper
 
 ```java
@@ -342,15 +350,18 @@ public interface AuthorMapper extends IMapper<Author,
 [Show me how (first case)](src/test/java/org/malsati/simple_web_app/mapper/AuthorMapper.java) <br />
 [Show me how (second case)](src/test/java/org/malsati/simple_web_app/mapper/BookMapper.java)
 
-## 4) Design your repository
+[back to main steps](#howtouse)
+
+## <a id="step04"></a> 4) Design your repository
 Make sure you inherit from `JpaRepository` as well as `JpaSpecificationExecutor` :
 ```java
-public interface AuthorRepository extends JpaRepository<Author, Long>, JpaSpecificationExecutor<Author> {
-    boolean existsByFullName(String name);
+public interface AuthorRepository extends JpaRepository<Author, Long>, JpaSpecificationExecutor<Author> {    
 }
 ```
 
-## 5) Write down your service class:
+[back to main steps](#howtouse)
+
+## <a id="step05"></a> 5) Write down your service class:
 1. It should extend CrudServiceORM
 2. In its constructor, it should inject the entity
    repository and the mapper you've created in previous steps.
@@ -376,34 +387,12 @@ public class AuthorsService extends CrudServiceORM<
             AuthorRepository authorRepository,
             AuthorMapper mapper) {
         super(authorRepository, mapper);
-    }
-
-    @Autowired
-    BookRepository bookRepository;    
-
-    @Override
-    public ArrayList<AppError> validateCreateOneInput(CreateOneAuthorInputDto createOneAuthorInputDto) {
-        // Write down your own validation for the input Dto
-    }
-
-    @Override
-    protected void onPreCreateOne(CreateOneAuthorInputDto createOneAuthorInputDto, Author entityToCreate) {
-        // Write down any Business Specific Logic Here before the entity is saved to DB
-    }
-
-    @Override
-    public Pair<ArrayList<AppError>, Author> validateUpdateOneInput(UpdateOneAuthorInputDto updateOneAuthorInputDto) {
-        // Write down your own validation for the input Dto
-    }
-
-    @Override
-    protected void onPrUpdateOne(UpdateOneAuthorInputDto updateOneAuthorInputDto, Author author) {
-        // Write down any Business Specific Logic Here before the entity is saved to DB
-    }
+    }   
 }
 ```
+[back to main steps](#howtouse)
 
-## 6) Write your CRUD Controller:
+## <a id="step06"></a> 6) Write your CRUD Controller:  
 1. It should inherit from CRUDController<br/>
 2. It should pass the service class you've created in previous step
 
@@ -417,11 +406,14 @@ public class AuthorsController extends CrudController<Author,
         UpdateOneAuthorInputDto,
         DeleteOneAuthorOutputDto,
         GetOneAuthorOutputDto> {
+    
     public AuthorsController(AuthorsService authorsService) {
         super(authorsService);
     }
 }
 ```
+
+[back to main steps](#howtouse)
 
 # How to test 
 ```bash
@@ -573,5 +565,4 @@ The Structure:
 ![Class Diagram](assets/classDiagram.png)
 
 ### Roadmap
-1. xrest.cli (progress)
-2. JSON schema validation (todo)
+JSON schema validation (todo)
