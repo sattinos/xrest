@@ -11,7 +11,7 @@
     <groupId>io.github.sattinos</groupId>
     <artifactId>xrest</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.16</version>
+    <version>1.0.19</version>
     <name>xrest</name>
     <url>https://github.com/sattinos/xrest.git</url>
     <description>A REST accelerator library. It allows for creating CRUD Controller and express conditions in JSON
@@ -46,10 +46,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

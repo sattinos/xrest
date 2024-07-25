@@ -95,7 +95,7 @@ public class CrudServiceORM<T,
     }
 
     @Override
-    public ServiceResponse<CreateOneOutputDto[]> createMany(Iterable<CreateOneInputDto> createManyInputDto) {
+    public ServiceResponse<List<CreateOneOutputDto>> createMany(Iterable<CreateOneInputDto> createManyInputDto) {
         var allValidations = validateCreateManyInput(createManyInputDto);
         if (!allValidations.isEmpty()) {
             return new ServiceResponse<>(allValidations);

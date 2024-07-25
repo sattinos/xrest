@@ -69,3 +69,10 @@
 1.0.18
 ======
     [modify] update readme
+
+1.0.19
+======
+    [fix] version conflict when used by Spring Web App of different version than the internal used by XRest
+    [add] In operator is now supported in JSON notation
+    [add] In operator Test Cases in JSON notation (T04_JSONConditionTest)
+    [modify] update readme
