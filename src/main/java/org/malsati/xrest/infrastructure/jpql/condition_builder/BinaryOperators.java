@@ -8,4 +8,5 @@ public class BinaryOperators {
     public static final String greaterOrEqual = ">=";
     public static final String notEqual = "!=";
     public static final String like = "like";
+    public static final String in = "in";
 }

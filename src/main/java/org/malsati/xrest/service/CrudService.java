@@ -125,7 +125,7 @@ public interface CrudService<T,
      * }</pre>
      * @see CrudService#createOne
      */
-    ServiceResponse<CreateOneOutputDto[]> createMany(Iterable<CreateOneInputDto> createManyInputDto);
+    ServiceResponse<List<CreateOneOutputDto>> createMany(Iterable<CreateOneInputDto> createManyInputDto);
 
     /**
      * It updates a list of fields in the entity. Please, put null for the fields you don't want to update.

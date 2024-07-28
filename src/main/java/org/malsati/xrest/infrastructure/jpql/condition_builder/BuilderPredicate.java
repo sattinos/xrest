@@ -1,5 +1,6 @@
 package org.malsati.xrest.infrastructure.jpql.condition_builder;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
@@ -11,6 +12,7 @@ public interface BuilderPredicate<T> {
                       Join<T, ?> join,
                       String operator,
                       String fieldName,
-                      Object value,
+                      JsonNode value,
+                      String hint,
                       CriteriaBuilder criteriaBuilder);
 }

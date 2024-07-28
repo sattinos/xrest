@@ -40,7 +40,19 @@ Principally, XRest is supposed to work on any Sql-based database (PostgreSQL, My
 <dependency>
     <groupId>io.github.sattinos</groupId>
     <artifactId>xrest</artifactId>
-    <version>1.0.13</version>
+    <version>1.0.19</version>
+    <exclusions>
+        <!-- Exclude spring-boot-starter-data-jpa to avoid version conflict -->
+        <exclusion>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </exclusion>
+        <!-- Exclude spring-boot-starter-web to avoid version conflict -->
+        <exclusion>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </exclusion>
+    </exclusions>
 </dependency>
 ```
 
@@ -566,3 +578,17 @@ The Structure:
 
 ### Roadmap
 JSON schema validation (todo)
+    Handle Invalid Input:
+        wrong key
+
+Update Where
+
+Transitive Dependency
+
+Post Hooks
+Missing Hooks
+
+Support WildCard
+
+
+CrudService should be protected

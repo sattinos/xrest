@@ -34,7 +34,7 @@ public abstract class CrudController<T,
         UpdateOneInputDto,
         DeleteOneOutputDto,
         GetOneOutputDto> {
-    private CrudService<T,
+    protected CrudService<T,
             TKeyType,
             CreateOneInputDto,
             CreateOneOutputDto,
@@ -159,7 +159,7 @@ public abstract class CrudController<T,
      * @see CrudController#createOne
      */
     @PostMapping(CrudEndpoints.CREATE_MANY)
-    protected ResponseEntity<ServiceResponse<CreateOneOutputDto[]>> createMany(@RequestBody Iterable<CreateOneInputDto> createInputDto) {
+    protected ResponseEntity<ServiceResponse<List<CreateOneOutputDto>>> createMany(@RequestBody List<CreateOneInputDto> createInputDto) {
         var res = this.crudService.createMany(createInputDto);
         if (res.isSuccess()) {
             return new ResponseEntity<>(res, HttpStatus.CREATED);
@@ -259,7 +259,7 @@ public abstract class CrudController<T,
      *
      */
     @PatchMapping(CrudEndpoints.UPDATE_MANY)
-    protected ResponseEntity<ServiceResponse<Boolean>> updateMany(@RequestBody Iterable<UpdateOneInputDto> updateManyInputDto) {
+    protected ResponseEntity<ServiceResponse<Boolean>> updateMany(@RequestBody List<UpdateOneInputDto> updateManyInputDto) {
         var res = this.crudService.updateMany(updateManyInputDto);
         if (res.isSuccess()) {
             return new ResponseEntity<>(res, HttpStatus.OK);
