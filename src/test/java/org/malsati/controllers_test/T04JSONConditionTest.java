@@ -12,20 +12,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class T04_JSONConditionTest {
+public class T04JSONConditionTest {
 
-    public T04_JSONConditionTest(@Autowired BookService bookService) {
+    public T04JSONConditionTest(@Autowired BookService bookService) {
         this.bookService = bookService;
     }
 
-    private BookService bookService;
+    private final BookService bookService;
 
-    private static Pair<String, Long>[] conditions = new Pair[] {
+    private static final List<Pair<String, Long>> conditions = List.of(
             new Pair<>(
             """
                 {
@@ -51,7 +52,7 @@ public class T04_JSONConditionTest {
                   "type": "Date"
                 }
             """, 2L)
-    };
+    );
 
     @BeforeAll
     public void createManyBooks() {
@@ -87,7 +88,7 @@ public class T04_JSONConditionTest {
 
         ServiceResponse<List<CreateOneBookOutputDto>> result = bookService.createMany(List.of(createManyInputDto));
 
-        assert (result.isSuccess() == true);
+        assert (result.isSuccess());
         assert (result.data().size() == 3);
 
         createdBooks = result.data();
@@ -99,48 +100,47 @@ public class T04_JSONConditionTest {
     @Order(1)
     @DisplayName("In Operator test: Integers case")
     void inOperatorIntegerCase() {
-        String condition = conditions[0].first();
+        String condition = conditions.get(0).first();
 
-        String ids = createdBooks.stream().map( book -> book.getId() )
+        String ids = createdBooks.stream().map(CreateOneBookOutputDto::getId)
                 .map(String::valueOf)
                 .collect(Collectors.joining(","));
 
         var bakedCondition = condition.replace("{}", ids);
 
-        System.out.println(bakedCondition);
-        System.out.printf("Condition: %s\n", bakedCondition);
+        System.out.printf("bakedCondition: %s\n", bakedCondition);
         var serviceResponse = bookService.count(bakedCondition);
         System.out.printf("Service Response: %d\n", serviceResponse.data());
 
-        assert (serviceResponse.isSuccess() == true);
-        assert (serviceResponse.data() == conditions[0].second());
+        assert (serviceResponse.isSuccess());
+        assert (serviceResponse.data().equals(conditions.get(0).second()));
     }
 
     @Test
     @Order(2)
     @DisplayName("In Operator test: Strings case")
     void inOperatorStringCase() {
-        String condition = conditions[1].first();
+        String condition = conditions.get(1).first();
 
         System.out.printf("Condition: %s\n", condition);
         var serviceResponse = bookService.count(condition);
         System.out.printf("Service Response: %d\n", serviceResponse.data());
 
-        assert (serviceResponse.isSuccess() == true);
-        assert (serviceResponse.data() == conditions[1].second());
+        assert (serviceResponse.isSuccess());
+        assert (serviceResponse.data().equals(conditions.get(1).second()));
     }
 
     @Test
     @Order(3)
     @DisplayName("In Operator test: Dates case")
     void inOperatorDatesCase() {
-        String condition = conditions[2].first();
+        String condition = conditions.get(2).first();
 
         System.out.printf("Condition: %s\n", condition);
         var serviceResponse = bookService.count(condition);
         System.out.printf("Service Response: %d\n", serviceResponse.data());
 
-        assert (serviceResponse.isSuccess() == true);
-        assert (serviceResponse.data() == conditions[2].second());
+        assert (serviceResponse.isSuccess());
+        assert (Objects.equals(serviceResponse.data(), conditions.get(2).second()));
     }
 }

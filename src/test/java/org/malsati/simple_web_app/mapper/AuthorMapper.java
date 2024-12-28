@@ -7,7 +7,6 @@ import java.util.List;
 import org.malsati.simple_web_app.dto.author.*;
 import org.mapstruct.*;
 
-import org.malsati.simple_web_app.dto.author.*;
 import org.malsati.simple_web_app.entities.Author;
 import org.malsati.simple_web_app.entities.Book;
 import org.malsati.xrest.mapper.IMapper;
