@@ -11,7 +11,7 @@
     <groupId>io.github.sattinos</groupId>
     <artifactId>xrest</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.19</version>
+    <version>1.0.20</version>
     <name>xrest</name>
     <url>https://github.com/sattinos/xrest.git</url>
     <description>A REST accelerator library. It allows for creating CRUD Controller and express conditions in JSON

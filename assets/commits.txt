@@ -76,3 +76,9 @@
     [add] In operator is now supported in JSON notation
     [add] In operator Test Cases in JSON notation (T04_JSONConditionTest)
     [modify] update readme
+
+
+1.0.20
+======
+    [fix] Test case 4
+    [fix] Warnings

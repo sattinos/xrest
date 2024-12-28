@@ -3,8 +3,7 @@ package org.malsati.controllers_test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import org.malsati.simple_web_app.dto.author.*;
-import org.malsati.simple_web_app.dto.author.*;
+ import org.malsati.simple_web_app.dto.author.*;
 import org.malsati.simple_web_app.infrastructure.BookRepository;
 import org.malsati.simple_web_app.utils.json.JsonPrinter;
 import org.malsati.utilities.LogHelper;
@@ -47,7 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class T01_AuthorControllerTest {
+public class T01AuthorControllerTest {
     private static final String authorControllerBaseUrl = "/app/author";
 
     @Autowired
@@ -58,8 +57,8 @@ public class T01_AuthorControllerTest {
 
     private ObjectMapper objectMapper;
 
-    public T01_AuthorControllerTest(@Autowired MockMvc mockMvc,
-                                    @Autowired ObjectMapper objectMapper) {
+    public T01AuthorControllerTest(@Autowired MockMvc mockMvc,
+                                   @Autowired ObjectMapper objectMapper) {
         this.restHitter = mockMvc;
         this.objectMapper = objectMapper;
         this.jsonRestHitter = new JsonRestHitter(restHitter, objectMapper);

@@ -40,7 +40,7 @@ Principally, XRest is supposed to work on any Sql-based database (PostgreSQL, My
 <dependency>
     <groupId>io.github.sattinos</groupId>
     <artifactId>xrest</artifactId>
-    <version>1.0.19</version>
+    <version>1.0.20</version>
     <exclusions>
         <!-- Exclude spring-boot-starter-data-jpa to avoid version conflict -->
         <exclusion>

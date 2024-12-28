@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class T03_AuthorAndBookControllersTest {
+public class T03AuthorAndBookControllersTest {
     private static final String authorControllerBaseUrl = "/app/author";
     private static final String bookControllerBaseUrl = "/app/book";
 
@@ -45,8 +45,8 @@ public class T03_AuthorAndBookControllersTest {
 
     private ObjectMapper objectMapper;
 
-    public T03_AuthorAndBookControllersTest(@Autowired MockMvc mockMvc,
-                                    @Autowired ObjectMapper objectMapper) {
+    public T03AuthorAndBookControllersTest(@Autowired MockMvc mockMvc,
+                                           @Autowired ObjectMapper objectMapper) {
         this.restHitter = mockMvc;
         this.objectMapper = objectMapper;
         this.jsonRestHitter = new JsonRestHitter(restHitter, objectMapper);

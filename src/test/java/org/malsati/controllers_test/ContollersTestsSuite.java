@@ -6,10 +6,10 @@ import org.junit.platform.suite.api.Suite;
 @Suite
 @SelectClasses(
         {
-                T01_AuthorControllerTest.class,
-                T02_BookControllerTest.class,
-                T03_AuthorAndBookControllersTest.class,
-                T04_JSONConditionTest.class
+                T01AuthorControllerTest.class,
+                T02BookControllerTest.class,
+                T03AuthorAndBookControllersTest.class,
+                T04JSONConditionTest.class
         }
 )
 public class ContollersTestsSuite {
