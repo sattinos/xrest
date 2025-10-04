@@ -37,11 +37,15 @@ Principally, XRest is supposed to work on any Sql-based database (PostgreSQL, My
 
 # How to start
 1. In your Spring Boot project, add the following to the POM file:
+
+<br/>
+
+**Maven**
 ```xml
 <dependency>
     <groupId>io.github.sattinos</groupId>
     <artifactId>xrest</artifactId>
-    <version>1.0.20</version>
+    <version>1.0.21</version>
     <exclusions>
         <!-- Exclude spring-boot-starter-data-jpa to avoid version conflict -->
         <exclusion>
@@ -56,6 +60,17 @@ Principally, XRest is supposed to work on any Sql-based database (PostgreSQL, My
     </exclusions>
 </dependency>
 ```
+
+**Gradle**
+```groovy
+dependencies {
+    implementation('io.github.sattinos:xrest:1.0.21') {
+    exclude group: 'org.springframework.boot', module: 'spring-boot-starter-data-jpa'
+    exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
+    }
+}
+```
+
 
 2. make sure you add this configuration to tell Spring to scan for XRest components:
 

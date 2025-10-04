@@ -92,3 +92,7 @@
 ======
     [fix] duplicated method signature when key type is String
 
+1.0.24
+======
+    [add] missing docs
+
