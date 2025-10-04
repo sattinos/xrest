@@ -82,3 +82,13 @@
 ======
     [fix] Test case 4
     [fix] Warnings
+
+1.0.21
+======
+    [fix] Test case 4
+    [fix] Warnings
+
+1.0.23
+======
+    [fix] duplicated method signature when key type is String
+

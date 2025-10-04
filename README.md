@@ -11,7 +11,8 @@ A truly CRUD Controller, should offer:<br/>
 
 By using XRest, you will offer your project two benefits:
 1. a fast way to make CRUD controller for entities. [read more](#useLibrary)
-   - **/getOne**  ( condition can be passed ) <br/>
+   - **/getOneById**  ( condition can be passed ) <br/>
+   - **/getOneWhere**  ( condition can be passed ) <br/>
    - **/getMany** ( condition can be passed ) <br/>
    - **/count**  ( condition can be passed )<br/>
    - **/createOne** <br/>
