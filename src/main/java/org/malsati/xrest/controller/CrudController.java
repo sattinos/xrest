@@ -325,7 +325,7 @@ public abstract class CrudController<T,
      *
      */
     @GetMapping(CrudEndpoints.GET_ONE + "/{id}")
-    protected ResponseEntity<ServiceResponse<GetOneOutputDto>> getOne(@PathVariable TKeyType id) {
+    protected ResponseEntity<ServiceResponse<GetOneOutputDto>> getOneById(@PathVariable TKeyType id) {
         var res = this.crudService.getOneById(id);
         if (res.isSuccess()) {
             return new ResponseEntity<>(res, HttpStatus.OK);
@@ -373,7 +373,7 @@ public abstract class CrudController<T,
      * note: if the entity is soft delete, only an entity that is not soft deleted is returned.
      */
     @GetMapping(CrudEndpoints.GET_ONE)
-    protected ResponseEntity<ServiceResponse<GetOneOutputDto>> getOne(
+    protected ResponseEntity<ServiceResponse<GetOneOutputDto>> getOneWhere(
             @RequestBody(required = false) String condition
     ) {
         var res = this.crudService.getOne(condition);
